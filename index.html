@@ -10,159 +10,176 @@ html,body{width:100%;height:100%;overflow:hidden;background:#08080f;font-family:
 canvas{display:block;position:fixed;top:0;left:0;z-index:0}
 .watermark{position:fixed;bottom:16px;left:16px;z-index:5;color:rgba(100,140,180,0.08);font-size:9px;letter-spacing:3px;pointer-events:none}
 .fps{position:fixed;top:10px;left:10px;z-index:5;color:rgba(100,150,200,0.12);font-size:9px;pointer-events:none}
-.toolbar{position:fixed;top:10px;right:10px;z-index:20;display:flex;gap:6px}
-.tbtn{width:30px;height:30px;border-radius:7px;border:1px solid rgba(80,140,200,0.08);background:rgba(8,8,20,0.5);color:rgba(130,170,210,0.35);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.tbtn:hover{color:rgba(160,200,240,0.6);border-color:rgba(80,140,200,0.2)}
-.tbtn.on{color:rgba(100,200,140,0.6);border-color:rgba(100,200,140,0.15)}
-.tbtn.hide{display:none}
-.pnl{position:fixed;z-index:25;background:rgba(6,6,14,0.92);backdrop-filter:blur(20px);border:1px solid rgba(80,140,200,0.06);border-radius:10px;display:none;flex-direction:column;color:rgba(160,190,220,0.55);font-size:12px}
-.pnl.show{display:flex}
-.pnl-h{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(80,140,200,0.05);font-size:10px;letter-spacing:1px;color:rgba(130,170,210,0.35)}
-.pnl-h button{background:none;border:none;color:rgba(130,170,210,0.25);cursor:pointer;font-size:14px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:4px}
-.pnl-h button:hover{background:rgba(80,140,200,0.1);color:rgba(160,200,240,0.5)}
-.pnl-b{flex:1;overflow-y:auto;padding:10px 12px}
-#cfg{top:10px;right:10px;width:280px}
-#cfg label{display:block;color:rgba(130,170,210,0.35);font-size:10px;margin:10px 0 4px;letter-spacing:0.5px}
-#cfg input,#cfg select{width:100%;background:rgba(80,140,200,0.04);border:1px solid rgba(80,140,200,0.08);color:rgba(180,210,230,0.7);padding:7px 10px;border-radius:6px;font-size:11px;outline:none;font-family:inherit}
-#cfg input::placeholder{color:rgba(130,170,200,0.15)}
-#cfg select option{background:#0a0a18;color:#90b0c8}
+
+.toolbar{position:fixed;top:10px;left:10px;right:10px;z-index:20;display:flex;justify-content:space-between;pointer-events:none}
+.tbtn{height:30px;padding:0 10px;border-radius:7px;border:1px solid rgba(255,255,255,0.04);background:rgba(8,8,18,0.5);backdrop-filter:blur(12px);color:rgba(160,190,220,0.45);cursor:pointer;font-size:11px;display:flex;align-items:center;gap:5px;transition:all .2s;font-family:inherit;pointer-events:auto}
+.tbtn:hover{color:rgba(200,220,240,0.65);border-color:rgba(255,255,255,0.08)}
+.tbtn.on{color:rgba(100,200,160,0.7);border-color:rgba(100,200,160,0.15)}
+
+#aiReply{position:fixed;top:50px;left:50%;transform:translateX(-50%);z-index:15;max-width:min(600px,80vw);text-align:center;font-size:16px;font-weight:300;color:rgba(240,235,220,0.9);text-shadow:0 0 20px rgba(240,220,180,0.15),0 0 40px rgba(200,180,140,0.08);letter-spacing:0.5px;line-height:1.6;padding:10px 20px;pointer-events:none;transition:opacity .4s;opacity:0}
+#aiReply.show{opacity:1}
+
+.sb{position:fixed;top:0;bottom:0;width:320px;z-index:25;background:rgba(8,8,18,0.95);backdrop-filter:blur(24px);display:flex;flex-direction:column;color:rgba(160,190,220,0.55);font-size:12px;transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:4px 0 24px rgba(0,0,0,0.4)}
+.sb.left{left:0;border-right:1px solid rgba(255,255,255,0.04);transform:translateX(-100%)}
+.sb.right{right:0;border-left:1px solid rgba(255,255,255,0.04);transform:translateX(100%)}
+.sb.left.open{transform:translateX(0)}
+.sb.right.open{transform:translateX(0)}
+.sb-h{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.04);flex-shrink:0}
+.sb-h-title{font-size:10px;letter-spacing:1.5px;color:rgba(130,170,210,0.4)}
+.sb-h-info{font-size:9px;color:rgba(100,140,180,0.25);margin-top:2px}
+.sb-close{background:none;border:none;color:rgba(130,170,210,0.25);cursor:pointer;font-size:14px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:4px}
+.sb-close:hover{background:rgba(255,255,255,0.05);color:rgba(200,220,240,0.5)}
+.sb-body{flex:1;overflow-y:auto;padding:10px 12px}
+
+.sb-search{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);flex-shrink:0}
+.sb-search input{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);color:rgba(180,210,230,0.7);padding:7px 10px;border-radius:6px;font-size:11px;outline:none;font-family:inherit}
+.sb-search input::placeholder{color:rgba(130,170,210,0.2)}
+.sb-search input:focus{border-color:rgba(100,200,160,0.25)}
+
+.tk-item{padding:6px 8px;margin:1px 0;border-radius:5px;display:flex;align-items:center;gap:8px;transition:background .15s;border-left:2px solid transparent;cursor:default}
+.tk-item:hover{background:rgba(255,255,255,0.02)}
+.tk-item.active{background:rgba(100,200,160,0.06);border-left-color:rgba(100,200,160,0.3)}
+.tk-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:rgba(100,100,120,0.3)}
+.tk-name{color:rgba(180,210,230,0.7);font-family:'Cascadia Code','Consolas',monospace;font-size:10px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tk-gen{padding:3px 8px;border-radius:4px;border:1px solid rgba(100,200,160,0.15);background:rgba(100,200,160,0.06);color:rgba(130,200,160,0.7);cursor:pointer;font-size:10px;font-family:inherit;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.tk-gen:hover{background:rgba(100,200,160,0.12)}
+.tk-gen.loading{color:rgba(200,170,100,0.6);border-color:rgba(200,170,100,0.15);background:rgba(200,170,100,0.06);pointer-events:none}
+.tk-empty{text-align:center;padding:20px 0;color:rgba(100,140,180,0.2);font-size:11px}
+
+.sb-sec-h{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;font-size:10px;letter-spacing:1px;color:rgba(130,170,210,0.4);border-bottom:1px solid rgba(255,255,255,0.04);border-top:1px solid rgba(255,255,255,0.04);transition:color .15s;flex-shrink:0}
+.sb-sec-h:hover{color:rgba(160,200,240,0.6)}
+.sb-sec-h .arrow{transition:transform .2s;font-size:7px;display:inline-block;margin-right:6px}
+.sb-sec-h.expanded .arrow{transform:rotate(90deg)}
+.sb-sec-body{overflow:hidden;max-height:0;transition:max-height .3s ease}
+.sb-sec-body.show{max-height:2000px;overflow-y:auto}
+
+.pk-bar{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);flex-shrink:0}
+.pk-bar select{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);color:rgba(180,210,230,0.7);padding:6px 8px;border-radius:5px;font-size:11px;outline:none;font-family:inherit}
+.pk-bar select option{background:#0a0a18;color:#90b0c8}
+.pk-bar-btns{display:flex;gap:6px;margin-top:6px}
+.pk-bar-btns button{flex:1}
+.pk-section{font-size:9px;color:rgba(100,160,200,0.3);letter-spacing:1px;margin:8px 0 4px;padding-top:6px}
+.pk-hdr{font-size:10px;color:rgba(130,170,210,0.35);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.03)}
+.pk-hdr b{color:rgba(160,190,220,0.55);font-weight:normal}
+.pk-item{padding:5px 8px;margin:2px 0;border-radius:4px;font-size:11px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:background .15s}
+.pk-item:hover{background:rgba(100,200,160,0.06)}
+.pk-name{color:rgba(180,210,230,0.7);font-family:'Cascadia Code','Consolas',monospace;font-size:10px;min-width:90px}
+.pk-color{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.pk-mapping{font-size:10px;color:rgba(140,180,220,0.35);font-family:'Cascadia Code','Consolas',monospace}
+
+.sb-cfg label{display:block;color:rgba(130,170,210,0.35);font-size:10px;margin:10px 0 4px;letter-spacing:0.5px}
+.sb-cfg input,.sb-cfg select{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);color:rgba(180,210,230,0.7);padding:7px 10px;border-radius:6px;font-size:11px;outline:none;font-family:inherit}
+.sb-cfg input::placeholder{color:rgba(130,170,200,0.15)}
+.sb-cfg select option{background:#0a0a18;color:#90b0c8}
+
+.cbtn{flex:1;padding:7px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);color:rgba(140,180,220,0.55);cursor:pointer;font-size:11px;font-family:inherit;transition:all .2s}
+.cbtn:hover{background:rgba(255,255,255,0.06)}
+.cbtn.pri{border-color:rgba(100,200,160,0.15);color:rgba(130,200,160,0.7)}
+.cbtn.pri:hover{background:rgba(100,200,160,0.08)}
 .cbtn-row{display:flex;gap:6px;margin-top:12px}
-.cbtn{flex:1;padding:7px;border-radius:6px;border:1px solid rgba(80,140,200,0.1);background:rgba(80,140,200,0.06);color:rgba(140,180,220,0.55);cursor:pointer;font-size:11px;font-family:inherit;transition:all .2s}
-.cbtn:hover{background:rgba(80,140,200,0.12)}
-.cbtn.pri{border-color:rgba(90,180,130,0.2);color:rgba(130,200,160,0.7)}
-.cbtn.pri:hover{background:rgba(90,180,130,0.12)}
 .cmsg{font-size:10px;margin-top:6px;display:none;padding:4px 8px;border-radius:4px}
 .cmsg.show{display:block}
 .cmsg.ok{color:rgba(100,180,120,0.6);background:rgba(100,180,120,0.05)}
 .cmsg.err{color:rgba(200,100,100,0.6);background:rgba(200,100,100,0.05)}
-#dbg{top:10px;right:10px;width:380px;max-height:60vh}
-#dbg .pnl-b{font-family:'Cascadia Code','Consolas',monospace;font-size:10px;line-height:1.6}
+
+#dbgBody{font-family:'Cascadia Code','Consolas',monospace;font-size:10px;line-height:1.6}
 .dl{color:rgba(100,160,200,0.35);font-size:9px;margin:8px 0 3px;letter-spacing:1px;text-transform:uppercase}
 .dm{color:rgba(120,165,140,0.45)}
 .dj{color:rgba(140,180,220,0.45);word-break:break-all;white-space:pre-wrap}
 .de{color:rgba(210,100,100,0.55)}
 .dr{color:rgba(200,220,180,0.65);font-family:'Segoe UI',sans-serif;font-size:12px;padding:6px 8px;margin:4px 0;background:rgba(100,160,80,0.05);border-radius:4px;border-left:2px solid rgba(100,160,80,0.2)}
 .da{color:rgba(200,170,100,0.55);padding:4px 8px;margin:2px 0;background:rgba(200,170,100,0.04);border-radius:3px;border-left:2px solid rgba(200,170,100,0.15)}
-hr.dd{border:none;border-top:1px solid rgba(80,140,200,0.04);margin:8px 0}
+hr.dd{border:none;border-top:1px solid rgba(255,255,255,0.03);margin:8px 0}
+
 #inp{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:6px;width:min(520px,92vw)}
-.irow{display:flex;gap:8px;align-items:center;width:100%;background:rgba(8,8,18,0.7);backdrop-filter:blur(16px);border:1px solid rgba(80,140,200,0.06);border-radius:12px;padding:8px 12px}
+.irow{display:flex;gap:8px;align-items:center;width:100%;background:rgba(8,8,18,0.7);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:8px 12px}
 .irow input{flex:1;background:none;border:none;outline:none;color:rgba(180,200,220,0.75);font-size:13px;padding:4px 0;font-family:inherit}
 .irow input::placeholder{color:rgba(130,170,210,0.15)}
 .irow input:disabled{opacity:0.3}
-.sbtn{padding:6px 16px;border-radius:6px;border:1px solid rgba(80,140,200,0.1);background:rgba(80,140,200,0.06);color:rgba(140,180,220,0.5);cursor:pointer;font-size:12px;font-family:inherit;white-space:nowrap;transition:all .15s}
-.sbtn:hover{background:rgba(80,140,200,0.12);color:rgba(170,210,250,0.7)}
+.sbtn{padding:6px 16px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);color:rgba(140,180,220,0.5);cursor:pointer;font-size:12px;font-family:inherit;white-space:nowrap;transition:all .15s}
+.sbtn:hover{background:rgba(255,255,255,0.06);color:rgba(170,210,250,0.7)}
 .sbtn:disabled{opacity:0.3;cursor:default}
-#status{font-size:11px;color:rgba(160,200,160,0.4);min-height:18px;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .3s}
-#status.err{color:rgba(200,100,100,0.5)}
-#status.think{color:rgba(100,150,200,0.3)}
 #tokenTags{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;min-height:0}
-.ttag{font-size:9px;padding:2px 6px;border-radius:3px;background:rgba(80,140,200,0.08);color:rgba(140,180,220,0.45);letter-spacing:0.5px}
-#newTokenBanner{display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:15;background:rgba(200,170,60,0.1);border:1px solid rgba(200,170,60,0.15);border-radius:8px;padding:8px 14px;font-size:11px;color:rgba(200,180,100,0.7);cursor:pointer;max-width:min(480px,90vw);text-align:center;transition:all .3s}
-#newTokenBanner:hover{background:rgba(200,170,60,0.15)}
-#newTokenBanner .ntb-name{color:rgba(220,200,120,0.9);font-weight:bold}
-#tokenForm{display:none;position:fixed;z-index:30;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(10,10,22,0.96);backdrop-filter:blur(20px);border:1px solid rgba(80,140,200,0.1);border-radius:12px;padding:16px 20px;width:320px;color:rgba(160,190,220,0.55);font-size:12px}
-#tokenForm h3{font-size:12px;letter-spacing:1px;color:rgba(130,170,210,0.5);margin-bottom:12px;font-weight:normal}
-#tokenForm label{display:block;color:rgba(130,170,210,0.35);font-size:10px;margin:8px 0 3px}
-#tokenForm input,#tokenForm select{width:100%;background:rgba(80,140,200,0.04);border:1px solid rgba(80,140,200,0.08);color:rgba(180,210,230,0.7);padding:6px 8px;border-radius:5px;font-size:11px;outline:none;font-family:inherit}
-#tokenForm select option{background:#0a0a18;color:#90b0c8}
-.tf-btns{display:flex;gap:6px;margin-top:14px}
-#packs{top:10px;right:10px;width:420px;max-height:70vh}
-#packs .pnl-b{padding:0}
-.ptabs{display:flex;border-bottom:1px solid rgba(80,140,200,0.05)}
-.ptab{flex:1;padding:8px;text-align:center;font-size:10px;letter-spacing:1px;color:rgba(130,170,210,0.3);cursor:pointer;border:none;background:none;font-family:inherit;transition:all .2s}
-.ptab:hover{color:rgba(160,200,240,0.5)}
-.ptab.on{color:rgba(130,200,160,0.7);border-bottom:2px solid rgba(130,200,160,0.3)}
-.ptab-content{display:none;padding:10px 12px;overflow-y:auto;max-height:calc(70vh - 100px)}
-.ptab-content.show{display:block}
-.pk-hdr{font-size:10px;color:rgba(130,170,210,0.35);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(80,140,200,0.04)}
-.pk-hdr b{color:rgba(160,190,220,0.55);font-weight:normal}
-.pk-item{padding:5px 8px;margin:2px 0;border-radius:4px;font-size:11px;display:flex;align-items:center;gap:8px}
-.pk-item:hover{background:rgba(80,140,200,0.04)}
-.pk-name{color:rgba(180,210,230,0.7);font-family:'Cascadia Code','Consolas',monospace;font-size:10px;min-width:90px}
-.pk-cat{font-size:9px;padding:1px 5px;border-radius:3px;letter-spacing:0.5px}
-.pk-cat.emotion{background:rgba(200,170,60,0.1);color:rgba(200,180,100,0.6)}
-.pk-cat.shape{background:rgba(80,180,130,0.1);color:rgba(100,200,150,0.6)}
-.pk-cat.scene{background:rgba(140,100,200,0.1);color:rgba(170,130,220,0.6)}
-.pk-detail{color:rgba(140,180,220,0.35);font-size:10px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pk-color{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.pk-mapping{font-size:10px;color:rgba(140,180,220,0.35);font-family:'Cascadia Code','Consolas',monospace}
-.pk-section{font-size:9px;color:rgba(100,160,200,0.3);letter-spacing:1px;margin:8px 0 4px;padding-top:6px}
+.ttag{font-size:9px;padding:2px 6px;border-radius:3px;background:rgba(100,200,160,0.08);color:rgba(140,200,170,0.5);letter-spacing:0.5px}
 </style>
 </head>
 <body>
 <canvas id="cv"></canvas>
 <div class="watermark">SPIRIT INK v4.0</div>
 <div class="fps" id="fps"></div>
+<div id="aiReply"></div>
 
 <div class="toolbar">
-  <button class="tbtn" id="bPks" onclick="toggle('packs')">📦</button>
-  <button class="tbtn" id="bDbg" onclick="toggle('dbg')">📋</button>
-  <button class="tbtn" id="bCfg" onclick="toggle('cfg')">⚙</button>
+  <button class="tbtn" id="bLeft" onclick="toggleSidebar('left')">☰ 词典</button>
+  <button class="tbtn" id="bRight" onclick="toggleSidebar('right')">⚙ 系统</button>
 </div>
 
-<div class="pnl" id="cfg">
-  <div class="pnl-h"><span>CONFIG</span><button onclick="toggle('cfg')">✕</button></div>
-  <div class="pnl-b">
-    <label>AI 提供商</label>
-    <select id="cProvider"></select>
-    <label>API Key</label>
-    <input id="cKey" type="password" placeholder="粘贴 API Key..." />
-    <div id="cApiBaseRow" style="display:none">
-      <label>API 地址</label>
-      <input id="cApiBase" type="text" placeholder="https://..." />
+<div class="sb left" id="sidebarLeft">
+  <div class="sb-h">
+    <div>
+      <div class="sb-h-title">TOKEN 记忆</div>
+      <div class="sb-h-info" id="dictInfo">-</div>
     </div>
-    <label>模型</label>
-    <select id="cModel"></select>
-    <label>粒子数量</label>
-    <input id="cPart" type="number" min="20" max="500" step="10" value="100" />
-    <div class="cbtn-row">
-      <button class="cbtn pri" onclick="saveCfg()">保存</button>
-      <button class="cbtn" onclick="testCfg()">测试</button>
-      <button class="cbtn" onclick="resetPacks()">重置词典</button>
+    <button class="sb-close" onclick="toggleSidebar('left')">✕</button>
+  </div>
+  <div class="sb-search">
+    <input id="tokenSearch" placeholder="搜索 token..." oninput="renderTokenList()" />
+  </div>
+  <div class="sb-body" id="tokenList"></div>
+  <div class="sb-sec-h expanded" id="secPackH" onclick="toggleSection('pack')">
+    <span><span class="arrow">▶</span> 素材包</span>
+  </div>
+  <div class="sb-sec-body show" id="secPack" style="max-height:2000px">
+    <div class="pk-bar">
+      <select id="packSelect" onchange="switchPack(this.value)"></select>
+      <div class="pk-bar-btns">
+        <button class="cbtn pri" onclick="createNewPack()">新建包</button>
+        <button class="cbtn" onclick="exportPack()">导出</button>
+        <button class="cbtn" onclick="document.getElementById('importFile').click()">导入</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importPack(event)" />
+      </div>
     </div>
-    <div id="cMsg" class="cmsg"></div>
-    <div style="margin-top:10px;font-size:9px;color:rgba(100,140,180,0.25)">
-      词典: <span id="dictInfo">-</span> · 映射: <span id="packInfo">-</span>
-    </div>
+    <div style="padding:4px 12px 10px" id="mappingList"></div>
   </div>
 </div>
 
-<div class="pnl" id="dbg">
-  <div class="pnl-h"><span>DEBUG</span><div style="display:flex;gap:4px"><button onclick="document.getElementById('dbgBody').innerHTML=''">🗑</button><button onclick="toggle('dbg')">✕</button></div></div>
-  <div class="pnl-b" id="dbgBody"></div>
-</div>
-
-<div class="pnl" id="packs">
-  <div class="pnl-h"><span>TOKEN PACKS</span><button onclick="toggle('packs')">✕</button></div>
-  <div class="ptabs">
-    <button class="ptab on" onclick="switchPackTab('dict')">词典包</button>
-    <button class="ptab" onclick="switchPackTab('map')">素材映射包</button>
+<div class="sb right" id="sidebarRight">
+  <div class="sb-h">
+    <div>
+      <div class="sb-h-title">系统管理</div>
+    </div>
+    <button class="sb-close" onclick="toggleSidebar('right')">✕</button>
   </div>
-  <div class="ptab-content show" id="ptDict"></div>
-  <div class="ptab-content" id="ptMap"></div>
-</div>
-
-<div id="newTokenBanner" onclick="showTokenForm()"></div>
-
-<div id="tokenForm">
-  <h3>ADD NEW TOKEN</h3>
-  <label>Token 名称</label>
-  <input id="tfName" readonly />
-  <label>显示名</label>
-  <input id="tfDisplay" placeholder="如：忧郁" />
-  <label>分类</label>
-  <select id="tfCategory">
-    <option value="emotion">emotion（情感）</option>
-    <option value="shape">shape（形体）</option>
-    <option value="scene">scene（场景）</option>
-  </select>
-  <label>触发提示</label>
-  <input id="tfTrigger" placeholder="如：用户表达忧郁" />
-  <label>映射颜色（R,G,B 0-1）</label>
-  <input id="tfColor" placeholder="0.4,0.4,0.55" />
-  <div class="tf-btns">
-    <button class="cbtn pri" onclick="confirmAddToken()">添加</button>
-    <button class="cbtn" onclick="hideTokenForm()">跳过</button>
+  <div class="sb-sec-h" id="secCfgH" onclick="toggleSection('cfg')">
+    <span><span class="arrow">▶</span> 设置</span>
+  </div>
+  <div class="sb-sec-body" id="secCfg">
+    <div class="sb-cfg" style="padding:10px 12px">
+      <label>AI 提供商</label>
+      <select id="cProvider"></select>
+      <label>API Key</label>
+      <input id="cKey" type="password" placeholder="粘贴 API Key..." />
+      <div id="cApiBaseRow" style="display:none">
+        <label>API 地址</label>
+        <input id="cApiBase" type="text" placeholder="https://..." />
+      </div>
+      <label>模型</label>
+      <select id="cModel"></select>
+      <label>粒子数量</label>
+      <input id="cPart" type="number" min="20" max="500" step="10" value="100" />
+      <div class="cbtn-row">
+        <button class="cbtn pri" onclick="saveCfg()">保存</button>
+        <button class="cbtn" onclick="testCfg()">测试</button>
+        <button class="cbtn" onclick="resetPacks()">重置</button>
+      </div>
+      <div id="cMsg" class="cmsg"></div>
+    </div>
+  </div>
+  <div class="sb-sec-h" id="secDbgH" onclick="toggleSection('dbg')">
+    <span style="display:flex;align-items:center;gap:8px"><span class="arrow">▶</span> 调试日志 <button style="background:none;border:none;color:rgba(130,170,210,0.2);cursor:pointer;font-size:11px;padding:0 4px" onclick="event.stopPropagation();document.getElementById('dbgBody').innerHTML=''">清空</button></span>
+  </div>
+  <div class="sb-sec-body" id="secDbg">
+    <div style="padding:10px 12px" id="dbgBody"></div>
   </div>
 </div>
 
@@ -172,7 +189,6 @@ hr.dd{border:none;border-top:1px solid rgba(80,140,200,0.04);margin:8px 0}
     <button class="sbtn" id="sendBtn" onclick="send()">发送</button>
   </div>
   <div id="tokenTags"></div>
-  <div id="status"></div>
 </div>
 
 <script src="providers.js"></script>
@@ -192,54 +208,19 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // ═══════════════════════════════════════════════════════
 
 const DEFAULT_DICTIONARY = {
-  id: "standard-v1",
-  name: "标准情感词典",
-  version: "1.0.0",
-  tokens: {
-    happy:    { display_name:"开心", category:"emotion", trigger_hint:"用户表达开心、高兴、愉快" },
-    sad:      { display_name:"悲伤", category:"emotion", trigger_hint:"用户表达难过、失落、沮丧" },
-    angry:    { display_name:"愤怒", category:"emotion", trigger_hint:"用户表达生气、不满" },
-    fear:     { display_name:"恐惧", category:"emotion", trigger_hint:"用户表达害怕、担心" },
-    calm:     { display_name:"平静", category:"emotion", trigger_hint:"默认状态、安静、放松" },
-    love:     { display_name:"爱意", category:"emotion", trigger_hint:"用户表达喜欢、爱、温暖" },
-    surprise: { display_name:"惊讶", category:"emotion", trigger_hint:"用户表达吃惊、意外" },
-    think:    { display_name:"思考", category:"emotion", trigger_hint:"思考、分析、犹豫" },
-    curious:  { display_name:"好奇", category:"emotion", trigger_hint:"用户表达好奇、疑问" },
-    excited:  { display_name:"兴奋", category:"emotion", trigger_hint:"用户表达激动、期待" },
-    shy:      { display_name:"害羞", category:"emotion", trigger_hint:"用户表达害羞、不好意思" },
-    proud:    { display_name:"自豪", category:"emotion", trigger_hint:"用户表达骄傲、自信" },
-    sphere:   { display_name:"球体", category:"shape", trigger_hint:"聚成球形" },
-    ring:     { display_name:"环形", category:"shape", trigger_hint:"排成环形" },
-    heart:    { display_name:"心形", category:"shape", trigger_hint:"变成心形" },
-    star:     { display_name:"星形", category:"shape", trigger_hint:"变成星形" },
-    wave:     { display_name:"波浪", category:"shape", trigger_hint:"变成波浪形" },
-    line:     { display_name:"线形", category:"shape", trigger_hint:"排成直线" },
-    spiral:   { display_name:"螺旋", category:"shape", trigger_hint:"变成螺旋形" },
-    point:    { display_name:"收缩", category:"shape", trigger_hint:"收缩成点" },
-    greeting:     { display_name:"打招呼", category:"scene", trigger_hint:"用户打招呼", compose:["happy","ring"] },
-    celebration:  { display_name:"庆祝",   category:"scene", trigger_hint:"庆祝、赞美", compose:["excited","star"] },
-    thinking:     { display_name:"沉思",   category:"scene", trigger_hint:"思考问题", compose:["think","sphere"] },
-    affection:    { display_name:"温情",   category:"scene", trigger_hint:"安慰、关心", compose:["love","heart"] },
-    startled:     { display_name:"受惊",   category:"scene", trigger_hint:"惊吓、意外", compose:["surprise","point"] },
-  },
-  ai_rules: "简单回复用 1 个 emotion token。想展示形体加 1 个 shape token。复杂场景用 scene token。你可以自由使用词典中未列出的新 token 名，用户后续可添加。",
-  ai_examples: [
-    { user:"你好",     response:{content:"你好呀！",       tokens:["happy"]} },
-    { user:"变成心形", response:{content:"送你一颗心",     tokens:["love","heart"]} },
-    { user:"我有点难过", response:{content:"抱抱你",       tokens:["sad","sphere"]} },
-    { user:"哇！",     response:{content:"怎么啦！",       tokens:["startled"]} },
-    { user:"变成球",   response:{content:"好的，聚成球～", tokens:["calm","sphere"]} },
-    { user:"我考了第一名", response:{content:"太棒了！恭喜你！", tokens:["celebration"]} },
-  ]
+  id: "spirit-ink-v2",
+  name: "灵墨记忆",
+  version: "2.0.0",
+  tokens: {}
 };
 
 // ═══════════════════════════════════════════════════════
-// DEFAULT ASSET PACK (粒子)
+// DEFAULT ASSET PACK
 // ═══════════════════════════════════════════════════════
 
 const DEFAULT_ASSET_PACK = {
-  id: "particle-jarvis-v1",
-  name: "J.A.R.V.I.S 粒子风格",
+  id: "particle-v2",
+  name: "默认粒子",
   version: "1.0.0",
   renderer: "particle",
   config: {
@@ -252,33 +233,7 @@ const DEFAULT_ASSET_PACK = {
   default_mapping: {
     color:[0.4,0.4,0.45], spread:0, speed:0.001, breathe_amp:0.006, breathe_freq:1.0
   },
-  mappings: {
-    happy:    { color:[0.92,0.78,0.28], spread:0.35,  speed:0.009, breathe_amp:0.014, breathe_freq:1.4 },
-    sad:      { color:[0.28,0.38,0.72], spread:-0.12, speed:0.001, breathe_amp:0.004, breathe_freq:0.6 },
-    angry:    { color:[0.88,0.18,0.12], spread:0.45,  speed:0.018, breathe_amp:0.022, breathe_freq:2.0 },
-    fear:     { color:[0.45,0.25,0.58], spread:-0.35, speed:0.014, breathe_amp:0.003, breathe_freq:1.8 },
-    calm:     { color:[0.28,0.55,0.38], spread:0,     speed:0.001, breathe_amp:0.008, breathe_freq:0.8 },
-    love:     { color:[0.88,0.45,0.58], spread:0.18,  speed:0.003, breathe_amp:0.016, breathe_freq:0.9 },
-    surprise: { color:[0.85,0.85,0.88], spread:0.40,  speed:0.010, breathe_amp:0.020, breathe_freq:2.2 },
-    think:    { color:[0.48,0.32,0.68], spread:-0.18, speed:0.001, breathe_amp:0.005, breathe_freq:0.7 },
-    curious:  { color:[0.35,0.62,0.88], spread:0.12,  speed:0.005, breathe_amp:0.007, breathe_freq:1.0 },
-    excited:  { color:[0.92,0.82,0.35], spread:0.28,  speed:0.007, breathe_amp:0.012, breathe_freq:1.2 },
-    shy:      { color:[0.88,0.55,0.50], spread:-0.15, speed:0.002, breathe_amp:0.006, breathe_freq:0.9 },
-    proud:    { color:[0.88,0.78,0.28], spread:0.22,  speed:0.006, breathe_amp:0.010, breathe_freq:1.1 },
-    sphere: { shape:"sphere",  tightness:0.5, motion_speed:"normal", duration:2500 },
-    ring:   { shape:"ring",    tightness:0.5, motion_speed:"normal", duration:2500 },
-    heart:  { shape:"heart",   tightness:0.5, motion_speed:"slow",   duration:3000 },
-    star:   { shape:"star",    tightness:0.5, motion_speed:"normal", duration:2500 },
-    wave:   { shape:"wave",    tightness:0.5, motion_speed:"normal", duration:2500 },
-    line:   { shape:"line",    tightness:0.5, motion_speed:"normal", duration:2000 },
-    spiral: { shape:"spiral",  tightness:0.5, motion_speed:"normal", duration:2500 },
-    point:  { shape:"point",   tightness:0.5, motion_speed:"fast",   duration:1500 },
-    greeting:    { compose:["happy","ring"],   hold:true,  duration:3000 },
-    celebration: { compose:["excited","star"], hold:true,  duration:3000 },
-    thinking:    { compose:["think","sphere"], hold:true,  duration:4000 },
-    affection:   { compose:["love","heart"],   hold:true,  duration:4000 },
-    startled:    { compose:["surprise","point"], hold:false, duration:2000 },
-  }
+  mappings: {}
 };
 
 // ═══════════════════════════════════════════════════════
@@ -337,107 +292,471 @@ class SpringPool {
 }
 
 // ═══════════════════════════════════════════════════════
-// SHAPE GENERATORS
+// ARRANGEMENTS (30+ spatial patterns)
 // ═══════════════════════════════════════════════════════
 
-const SHAPES = {
+const ARRANGEMENTS = {
   sphere(i,n,p) {
     const phi=Math.acos(1-2*(i+0.5)/n), theta=Math.PI*(1+Math.sqrt(5))*i;
-    const r=0.15+p.tightness*0.55;
+    const r=(p.scale||0.5)*0.35+0.08;
     return [r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta)];
   },
   point(i,n,p) {
-    const r=p.tightness*0.08+0.02;
+    const r=(p.scale||0.3)*0.06+0.01;
     return [(Math.random()-.5)*r,(Math.random()-.5)*r,(Math.random()-.5)*r];
   },
   ring(i,n,p) {
-    const a=(i/n)*Math.PI*2, r=0.15+p.tightness*0.5;
-    return [Math.cos(a)*r, Math.sin(a)*r, (Math.random()-.5)*0.04];
+    const a=(i/n)*Math.PI*2, r=(p.scale||0.5)*0.35+0.08;
+    return [Math.cos(a)*r, Math.sin(a)*r, (Math.random()-.5)*0.03];
   },
   line(i,n,p) {
-    const t=(i/(n-1||1)-0.5)*1.2*(0.3+p.tightness*0.7);
-    return [t,(Math.random()-.5)*0.02,(Math.random()-.5)*0.02];
+    const s=(p.scale||0.5)*0.6+0.3;
+    const t=(i/(n-1||1)-0.5)*2*s;
+    return [t,(Math.random()-.5)*0.015,(Math.random()-.5)*0.015];
   },
   wave(i,n,p) {
-    const t=(i/(n-1||1));
-    return [(t-0.5)*1.5, Math.sin(t*Math.PI*3)*0.2*(0.5+p.tightness*0.5), Math.cos(t*Math.PI*3)*0.08];
+    const t=i/(n-1||1), s=(p.scale||0.5)*0.5+0.3;
+    return [(t-0.5)*2*s, Math.sin(t*Math.PI*3)*0.18*s, Math.cos(t*Math.PI*3)*0.06*s];
   },
   heart(i,n,p) {
-    const t=(i/n)*Math.PI*2, s=0.04+p.tightness*0.04;
+    const t=(i/n)*Math.PI*2, s=(p.scale||0.5)*0.04+0.02;
     const x=16*Math.pow(Math.sin(t),3)/17;
     const y=(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))/17;
-    return [x*s*1.5, y*s*1.5+0.05, (Math.random()-.5)*0.05*s];
+    return [x*s*1.5, y*s*1.5+0.05, (Math.random()-.5)*0.04*s];
   },
   star(i,n,p) {
-    const a=(i/n)*Math.PI*2-Math.PI/2;
-    const seg=(i/n)*10;
-    const r=(Math.floor(seg)%2===0?0.4+p.tightness*0.2:0.15+p.tightness*0.1);
-    const j=(Math.random()-.5)*0.03;
-    return [Math.cos(a)*(r+j), Math.sin(a)*(r+j)+0.05, (Math.random()-.5)*0.04];
+    const a=(i/n)*Math.PI*2-Math.PI/2, seg=(i/n)*10;
+    const r=(Math.floor(seg)%2===0?0.4:0.15)*((p.scale||0.5)*0.5+0.3);
+    const j=(Math.random()-.5)*0.025;
+    return [Math.cos(a)*(r+j), Math.sin(a)*(r+j)+0.05, (Math.random()-.5)*0.03];
   },
   spiral(i,n,p) {
-    const t=(i/n)*Math.PI*4, r=(i/n)*(0.1+p.tightness*0.6);
-    return [Math.cos(t)*r, Math.sin(t)*r*0.7, (Math.random()-.5)*0.05];
-  }
+    const t=(i/n)*Math.PI*4, r=(i/n)*((p.scale||0.5)*0.4+0.1);
+    return [Math.cos(t)*r, Math.sin(t)*r*0.7, (Math.random()-.5)*0.04];
+  },
+  cube(i,n,p) {
+    const s=(p.scale||0.5)*0.25+0.08;
+    const faces=Math.ceil(n/6), face=Math.floor(i/faces), fi=i%faces;
+    const side=Math.ceil(Math.sqrt(faces));
+    const u=(fi%side)/(side-1||1)-0.5, v=Math.floor(fi/side)/(side-1||1)-0.5;
+    if(face%6===0) return [u*s,v*s,s];
+    if(face%6===1) return [u*s,v*s,-s];
+    if(face%6===2) return [u*s,s,v*s];
+    if(face%6===3) return [u*s,-s,v*s];
+    if(face%6===4) return [s,u*s,v*s];
+    return [-s,u*s,v*s];
+  },
+  torus(i,n,p) {
+    const R=(p.scale||0.5)*0.25+0.1, r2=R*0.35;
+    const u=(i/n)*Math.PI*12, v=(i*2.399)%(Math.PI*2);
+    return [(R+r2*Math.cos(v))*Math.cos(u), r2*Math.sin(v), (R+r2*Math.cos(v))*Math.sin(u)];
+  },
+  helix(i,n,p) {
+    const t=(i/n)*Math.PI*6, r=(p.scale||0.5)*0.2+0.06;
+    const h=(i/n-0.5)*1.2;
+    return [Math.cos(t)*r, h, Math.sin(t)*r];
+  },
+  grid(i,n,p) {
+    const side=Math.ceil(Math.cbrt(n)), s=(p.scale||0.5)*0.4+0.1;
+    const x=(i%side)/(side-1||1)*s-s/2;
+    const y=(Math.floor(i/side)%side)/(side-1||1)*s-s/2;
+    const z=Math.floor(i/(side*side))/(side-1||1)*s-s/2;
+    return [x,y,z];
+  },
+  diamond(i,n,p) {
+    const s=(p.scale||0.5)*0.3+0.1;
+    const phi=Math.acos(1-2*(i+0.5)/n), theta=Math.PI*(1+Math.sqrt(5))*i;
+    const h=Math.cos(phi), r2=Math.sin(phi)*(1-Math.abs(h))*s*0.8;
+    return [r2*Math.cos(theta), h*s*0.8, r2*Math.sin(theta)];
+  },
+  cloud(i,n,p) {
+    const s=(p.scale||0.5)*0.35+0.15;
+    const numBlobs=5, blob=i%numBlobs, inBlob=Math.floor(i/numBlobs);
+    const perBlob=Math.ceil(n/numBlobs);
+    const offsets=[[0,0,0],[0.2,0.05,0],[-0.2,0.03,0.05],[0.1,-0.05,-0.05],[-0.15,0.08,-0.03]];
+    const bx=offsets[blob][0]*s, by=offsets[blob][1]*s, bz=offsets[blob][2]*s;
+    const br=(0.08+Math.random()*0.06)*s;
+    const phi=Math.acos(1-2*(inBlob+0.5)/perBlob), theta=Math.PI*(1+Math.sqrt(5))*inBlob;
+    return [bx+br*Math.sin(phi)*Math.cos(theta), by+br*Math.cos(phi)*0.6, bz+br*Math.sin(phi)*Math.sin(theta)*0.5];
+  },
+  rain(i,n,p) {
+    const s=(p.scale||0.5)*0.5+0.2;
+    const cols=Math.ceil(Math.sqrt(n));
+    const col=i%cols, row=Math.floor(i/cols);
+    const x=(col/(cols-1||1)-0.5)*s;
+    const y=(row/(Math.ceil(n/cols)-1||1)-0.5)*s*0.8;
+    return [x+(Math.random()-.5)*0.01, y, (Math.random()-.5)*0.01];
+  },
+  flame(i,n,p) {
+    const s=(p.scale||0.5)*0.3+0.1;
+    const t=i/n, baseW=0.3*s*(1-t*0.7);
+    const h=t*s*1.5-s*0.5;
+    const a=(i*2.399)%(Math.PI*2);
+    const r=baseW*(0.3+Math.random()*0.7);
+    return [Math.cos(a)*r, h, Math.sin(a)*r*0.6];
+  },
+  snow(i,n,p) {
+    const s=(p.scale||0.5)*0.5+0.2;
+    return [(Math.random()-.5)*s, (Math.random()-.5)*s, (Math.random()-.5)*s*0.3];
+  },
+  mountain(i,n,p) {
+    const s=(p.scale||0.5)*0.4+0.15;
+    const cols=Math.ceil(Math.sqrt(n));
+    const col=i%cols, row=Math.floor(i/cols);
+    const u=col/(cols-1||1)-0.5, v=row/(Math.ceil(n/cols)-1||1)-0.5;
+    const p1=Math.exp(-((u+0.15)**2+v**2)*12)*0.35*s;
+    const p2=Math.exp(-((u-0.2)**2+(v-0.1)**2)*20)*0.25*s;
+    return [u*s, (p1+p2)*0.5, v*s*0.5];
+  },
+  ocean(i,n,p) {
+    const s=(p.scale||0.5)*0.5+0.2;
+    const cols=Math.ceil(Math.sqrt(n));
+    const col=i%cols, row=Math.floor(i/cols);
+    const u=col/(cols-1||1)-0.5, v=row/(Math.ceil(n/cols)-1||1)-0.5;
+    const y=Math.sin(u*8)*0.04*s+Math.sin(v*6+1)*0.03*s;
+    return [u*s, y, v*s*0.4];
+  },
+  aurora(i,n,p) {
+    const s=(p.scale||0.5)*0.4+0.2;
+    const t=i/n, x=(t-0.5)*s*2.5;
+    const wave=Math.sin(t*Math.PI*3)*0.15*s;
+    const height=0.1*s+Math.sin(t*Math.PI*5)*0.08*s;
+    return [x, wave+height+(Math.random()-.5)*0.02, (Math.random()-.5)*0.03*s];
+  },
+  waterfall(i,n,p) {
+    const s=(p.scale||0.5)*0.3+0.1;
+    const cols=Math.ceil(Math.sqrt(n*0.5));
+    const col=i%cols, row=Math.floor(i/cols);
+    const x=(col/(cols-1||1)-0.5)*s*0.4;
+    const y=-(row/(Math.ceil(n/cols)-1||1))*s*1.2+s*0.3;
+    return [x+Math.sin(y*5)*0.015, y, (Math.random()-.5)*0.02];
+  },
+  tornado(i,n,p) {
+    const s=(p.scale||0.5)*0.35+0.1;
+    const t=i/n, h=(t-0.5)*s*2;
+    const r=(0.02+t*0.4)*s, a=t*Math.PI*8+i*0.5;
+    return [Math.cos(a)*r, h, Math.sin(a)*r];
+  },
+  galaxy(i,n,p) {
+    const s=(p.scale||0.5)*0.35+0.1;
+    const arms=2, arm=i%arms, t=i/n;
+    const a=t*Math.PI*5+(arm/arms)*Math.PI*2;
+    const r=t*s*0.8;
+    const scatter=(1-t*0.5)*0.03*s;
+    return [Math.cos(a)*r+(Math.random()-.5)*scatter, (Math.random()-.5)*scatter*0.3, Math.sin(a)*r+(Math.random()-.5)*scatter];
+  },
+  nebula(i,n,p) {
+    const s=(p.scale||0.5)*0.4+0.15;
+    const clusters=4, c=i%clusters, ci=Math.floor(i/clusters), cps=Math.ceil(n/clusters);
+    const centers=[[0,0,0],[0.2,0.1,-0.1],[-0.15,-0.1,0.15],[0.1,-0.15,-0.1]];
+    const cx=centers[c][0]*s, cy=centers[c][1]*s, cz=centers[c][2]*s;
+    const r=(0.08+Math.random()*0.12)*s;
+    const phi=Math.acos(1-2*(ci+0.5)/cps), theta=Math.PI*(1+Math.sqrt(5))*ci;
+    return [cx+r*Math.sin(phi)*Math.cos(theta), cy+r*Math.cos(phi), cz+r*Math.sin(phi)*Math.sin(theta)];
+  },
+  starfield(i,n,p) {
+    const s=(p.scale||0.5)*0.6+0.2;
+    const phi=Math.acos(1-2*(i+0.5)/n), theta=Math.PI*(1+Math.sqrt(5))*i;
+    const r=s*(0.5+Math.random()*0.5);
+    return [r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta)];
+  },
+  comet(i,n,p) {
+    const s=(p.scale||0.5)*0.3+0.1;
+    const headN=Math.max(1,Math.floor(n*0.3));
+    if(i<headN) {
+      const phi=Math.acos(1-2*(i+0.5)/headN), theta=Math.PI*(1+Math.sqrt(5))*i;
+      const r=0.04*s;
+      return [0.2*s+r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta)];
+    }
+    const t=(i-headN)/(n-headN-1||1);
+    const spread=t*0.15*s;
+    return [0.2*s-t*0.6*s+(Math.random()-.5)*spread, (Math.random()-.5)*spread*0.5, (Math.random()-.5)*spread*0.3];
+  },
+  blackhole(i,n,p) {
+    const s=(p.scale||0.5)*0.3+0.1;
+    const t=i/n, a=t*Math.PI*12+Math.sqrt(t)*3;
+    const r=(0.05+t*0.4)*s;
+    const thickness=(1-t*0.3)*0.015*s;
+    return [Math.cos(a)*r, (Math.random()-.5)*thickness, Math.sin(a)*r];
+  },
+  supernova(i,n,p) {
+    const s=(p.scale||0.5)*0.3+0.1;
+    const phi=Math.acos(1-2*(i+0.5)/n), theta=Math.PI*(1+Math.sqrt(5))*i;
+    const r=(0.15+Math.random()*0.2)*s;
+    return [r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta)];
+  },
+  vortex(i,n,p) {
+    const s=(p.scale||0.5)*0.3+0.1;
+    const t=i/n, a=t*Math.PI*10, r=Math.sqrt(t)*s*0.4;
+    return [Math.cos(a)*r, (Math.random()-.5)*s*0.3, Math.sin(a)*r];
+  },
+  fountain(i,n,p) {
+    const s=(p.scale||0.5)*0.25+0.1;
+    const t=i/n, a=(i*2.399)%(Math.PI*2);
+    const spread2=t*0.3*s;
+    const y=-t*t*s*0.8+s*0.3;
+    return [Math.cos(a)*spread2, y, Math.sin(a)*spread2*0.6];
+  },
+  bloom(i,n,p) {
+    const s=(p.scale||0.5)*0.25+0.1;
+    const t=i/n;
+    const layers=3, layer=i%layers;
+    const petals=6, petal=Math.floor(i/Math.ceil(n/(layers*petals)))%petals;
+    const pa=(petal/petals)*Math.PI*2;
+    const pr=(0.05+layer*0.08)*s;
+    const lift=layer*0.06*s;
+    const scatter=Math.sin(t*Math.PI)*0.03*s;
+    return [Math.cos(pa)*pr+scatter, lift+(Math.random()-.5)*0.01, Math.sin(pa)*pr+scatter];
+  },
+  dna(i,n,p) {
+    const s=(p.scale||0.5)*0.2+0.08;
+    const strand=i%2;
+    const t=Math.floor(i/2)/(Math.ceil(n/2)-1||1);
+    const a=t*Math.PI*6+strand*Math.PI;
+    const r=0.12*s;
+    const y=(t-0.5)*s*4;
+    return [Math.cos(a)*r, y, Math.sin(a)*r];
+  },
+  lotus(i,n,p) {
+    const s=(p.scale||0.5)*0.2+0.1;
+    const layers=3, layer=i%layers;
+    const petals=6+layer*2, petal=Math.floor(i/layers)%petals;
+    const pa=(petal/petals)*Math.PI*2;
+    const pr=(0.05+layer*0.08)*s;
+    const lift=layer*0.06*s;
+    return [Math.cos(pa)*pr, lift+(Math.random()-.5)*0.01, Math.sin(pa)*pr];
+  },
+  feather(i,n,p) {
+    const s=(p.scale||0.5)*0.3+0.1;
+    const t=i/n, spine=t*s*1.5-s*0.5;
+    const side=(i%2===0)?1:-1;
+    const barbDist=Math.sin(t*Math.PI)*0.15*s;
+    const barb=(Math.random()*0.5+0.5)*barbDist*side;
+    return [spine, barb, (Math.random()-.5)*0.01*s];
+  },
+  rainbow(i,n,p) {
+    const s=(p.scale||0.5)*0.3+0.15;
+    const t=i/n, a=t*Math.PI-Math.PI*0.5, r=s*0.5;
+    return [Math.cos(a)*r*1.5, Math.sin(a)*r, (Math.random()-.5)*0.015*s];
+  },
+};
+const SHAPES = ARRANGEMENTS;
+
+// ═══════════════════════════════════════════════════════
+// MOVEMENTS (13 continuous motion behaviors)
+// Return [dx, dy, dz] position offsets applied per-frame
+// ═══════════════════════════════════════════════════════
+
+const MOVEMENTS = {
+  drift(i,n,t,p,pt) {
+    const spd=(p.movement_speed||0.3)*2, amp=(p.movement_amplitude||0.05)*0.15;
+    return [
+      Math.sin(t*spd+pt.phase)*amp,
+      Math.cos(t*spd*0.7+pt.phase*1.3)*amp*0.6,
+      Math.sin(t*spd*0.5+pt.phase*0.7)*amp*0.4
+    ];
+  },
+  float_up(i,n,t,p,pt) {
+    const spd=(p.movement_speed||0.5)*1.5, amp=(p.movement_amplitude||0.3)*0.2;
+    return [
+      Math.sin(t*spd+pt.phase)*amp*0.1,
+      Math.sin(t*spd*0.3+pt.phase)*amp*0.5+amp*0.15,
+      Math.cos(t*spd*0.5+pt.phase)*amp*0.08
+    ];
+  },
+  fall_down(i,n,t,p,pt) {
+    const spd=(p.movement_speed||0.5)*1.5, amp=(p.movement_amplitude||0.3)*0.2;
+    return [
+      Math.sin(t*spd+pt.phase)*amp*0.08,
+      -(Math.sin(t*spd*0.3+pt.phase)*amp*0.3+amp*0.12),
+      Math.cos(t*spd*0.5+pt.phase)*amp*0.06
+    ];
+  },
+  orbit(i,n,t,p,pt) {
+    const spd=(p.movement_speed||0.5)*1.2, amp=(p.movement_amplitude||0.5)*0.08;
+    const a=t*spd+pt.phase;
+    return [Math.cos(a)*amp, Math.sin(a*0.3)*amp*0.2, Math.sin(a)*amp];
+  },
+  pulse(i,n,t,p,pt) {
+    const freq=(p.movement_speed||1)*2.5, amp=(p.movement_amplitude||0.3)*0.05;
+    const wave=Math.sin(t*freq+pt.phase*0.5)*amp;
+    const dx=pt.tx||0, dy=pt.ty||0, dz=pt.tz||0;
+    const d=Math.sqrt(dx*dx+dy*dy+dz*dz)||0.01;
+    return [dx/d*wave, dy/d*wave, dz/d*wave];
+  },
+  spiral_motion(i,n,t,p,pt) {
+    const spd=(p.movement_speed||0.5)*1.5, amp=(p.movement_amplitude||0.3)*0.06;
+    const a=t*spd+i*0.3;
+    return [Math.cos(a)*amp, Math.sin(a*0.5)*amp*0.3, Math.sin(a)*amp];
+  },
+  flicker(i,n,t,p,pt) {
+    const amp=(p.movement_amplitude||0.5)*0.025;
+    return [
+      (Math.random()-.5)*amp*Math.sin(t*5+i),
+      (Math.random()-.5)*amp*Math.sin(t*4+i*1.3),
+      (Math.random()-.5)*amp*0.5
+    ];
+  },
+  flow(i,n,t,p,pt) {
+    const spd=(p.movement_speed||0.5)*2, amp=(p.movement_amplitude||0.3)*0.06;
+    return [
+      Math.sin(t*spd+pt.phase)*amp+amp*0.3,
+      Math.cos(t*spd*0.7+pt.phase*0.7)*amp*0.4,
+      Math.sin(t*spd*0.8+pt.phase*1.3)*amp*0.2
+    ];
+  },
+  breathe_motion(i,n,t,p,pt) {
+    const freq=(p.movement_speed||0.8)*2.5, amp=(p.movement_amplitude||0.5)*0.06;
+    const wave=Math.sin(t*freq)*amp;
+    return [wave*0.5, wave, wave*0.3];
+  },
+  ripple(i,n,t,p,pt) {
+    const spd=(p.movement_speed||1)*4, amp=(p.movement_amplitude||0.3)*0.03;
+    const r2=(pt.tx||0)**2+(pt.tz||0)**2;
+    const wave=Math.sin(t*spd-Math.sqrt(r2)*10)*amp;
+    return [0, wave, 0];
+  },
+  sway(i,n,t,p,pt) {
+    const spd=(p.movement_speed||0.5)*2.5, amp=(p.movement_amplitude||0.3)*0.05;
+    return [
+      Math.sin(t*spd+pt.phase*0.5)*amp,
+      Math.sin(t*spd*0.7+pt.phase)*amp*0.3,
+      Math.cos(t*spd*0.5+pt.phase*0.3)*amp*0.2
+    ];
+  },
+  vibrate(i,n,t,p,pt) {
+    const amp=(p.movement_amplitude||0.3)*0.012;
+    return [(Math.random()-.5)*amp*2,(Math.random()-.5)*amp*2,(Math.random()-.5)*amp];
+  },
+  wave_motion(i,n,t,p,pt) {
+    const spd=(p.movement_speed||1)*3, amp=(p.movement_amplitude||0.3)*0.04;
+    const normalized=i/(n-1||1);
+    const wave=Math.sin(t*spd-normalized*Math.PI*4)*amp;
+    return [0, wave, wave*0.3];
+  },
 };
 
 // ═══════════════════════════════════════════════════════
-// TOKEN ENGINE
+// TOKEN ENGINE (multi-pack)
 // ═══════════════════════════════════════════════════════
 
 class TokenEngine {
   constructor() {
     this.dictionary = null;
     this.assetPack = null;
-    this.pendingTokens = [];
+    this.allPacks = {};
+    this.activePackId = null;
+    this.pendingRenderTokens = [];
     this.activeTokenNames = [];
   }
 
   init() {
-    this.dictionary = this._load('si_dict', DEFAULT_DICTIONARY);
-    this.assetPack = this._load('si_pack', DEFAULT_ASSET_PACK);
+    this.dictionary = this._loadDict();
+    this._loadPacks();
   }
 
-  _load(key, defaults) {
+  _loadDict() {
     try {
-      const raw = localStorage.getItem(key);
-      if(raw) { const p=JSON.parse(raw); if(p.id) return p; }
+      const raw = localStorage.getItem('si_dict');
+      if(raw) { const p=JSON.parse(raw); if(p.id === DEFAULT_DICTIONARY.id) return p; }
     } catch(e) {}
-    return JSON.parse(JSON.stringify(defaults));
+    return JSON.parse(JSON.stringify(DEFAULT_DICTIONARY));
+  }
+
+  _loadPacks() {
+    try {
+      const raw = localStorage.getItem('si_packs');
+      if(raw) this.allPacks = JSON.parse(raw);
+    } catch(e) {}
+    if(Object.keys(this.allPacks).length === 0) {
+      const def = JSON.parse(JSON.stringify(DEFAULT_ASSET_PACK));
+      this.allPacks[def.id] = def;
+    }
+    this.activePackId = localStorage.getItem('si_active_pack') || Object.keys(this.allPacks)[0];
+    this.assetPack = this.allPacks[this.activePackId];
+    if(!this.assetPack) {
+      this.activePackId = Object.keys(this.allPacks)[0];
+      this.assetPack = this.allPacks[this.activePackId];
+    }
   }
 
   _saveDict() { localStorage.setItem('si_dict', JSON.stringify(this.dictionary)); }
-  _savePack() { localStorage.setItem('si_pack', JSON.stringify(this.assetPack)); }
+
+  _savePack() {
+    this.allPacks[this.activePackId] = this.assetPack;
+    localStorage.setItem('si_packs', JSON.stringify(this.allPacks));
+    localStorage.setItem('si_active_pack', this.activePackId);
+  }
+
+  listPacks() {
+    return Object.entries(this.allPacks).map(([id, p]) => ({
+      id, name: p.name, count: Object.keys(p.mappings).length, active: id === this.activePackId
+    }));
+  }
+
+  switchPack(id) {
+    if(!this.allPacks[id] || id === this.activePackId) return;
+    this._savePack();
+    this.activePackId = id;
+    this.assetPack = this.allPacks[id];
+    localStorage.setItem('si_active_pack', id);
+  }
+
+  createPack(name) {
+    const id = 'pack-' + Date.now();
+    this.allPacks[id] = {
+      id, name: name || '新素材包', version: '1.0.0', renderer: 'particle',
+      config: { particle_count: 100, background: '#08080f', bloom: {strength:0.12, radius:0.4, threshold:0.88}, spring_k: 80, spring_d: 12 },
+      default_mapping: {color:[0.4,0.4,0.45], spread:0, speed:0.001, breathe_amp:0.006, breathe_freq:1.0},
+      mappings: {}
+    };
+    localStorage.setItem('si_packs', JSON.stringify(this.allPacks));
+    return id;
+  }
+
+  importPackData(data) {
+    if(!data.id || !data.name || !data.mappings) throw new Error('无效的素材包格式');
+    this.allPacks[data.id] = data;
+    localStorage.setItem('si_packs', JSON.stringify(this.allPacks));
+    return data.id;
+  }
+
+  exportPackData() {
+    return JSON.stringify(this.assetPack, null, 2);
+  }
 
   resolve(tokenInputs) {
-    this.pendingTokens = [];
+    this.pendingRenderTokens = [];
     const flat = this._flatten(tokenInputs);
     let emotion = null, shape = null;
     const resolved = [];
 
     for(const item of flat) {
-      const name = item.name;
-      const dictDef = this.dictionary.tokens[name];
+      const name = typeof item === 'string' ? item : item.name;
       const mapping = this.assetPack.mappings[name];
-      const isUnknown = !dictDef && !mapping;
 
-      if(!dictDef) this.pendingTokens.push({name, type:'unknown'});
-      else if(!mapping) this.pendingTokens.push({name, type:'unmapped'});
+      if(!this.dictionary.tokens[name]) {
+        this.dictionary.tokens[name] = { created_at: new Date().toISOString().slice(0,10), source: 'ai' };
+        this._saveDict();
+      }
 
-      if(mapping) {
-        if(mapping.compose) {
-          const sub = this._resolveCompose(mapping.compose, item);
-          if(sub.emotion) emotion = sub.emotion;
-          if(sub.shape) shape = {...sub.shape, ...this._pickOverride(mapping, item)};
-          resolved.push(name);
-        } else if(mapping.shape) {
-          shape = {...mapping, ...this._pickOverride({}, item)};
-          resolved.push(name);
-        } else if(mapping.color || mapping.spread !== undefined) {
-          emotion = mapping;
-          resolved.push(name);
-        }
-      } else if(isUnknown) {
+      if(!mapping) {
+        this.pendingRenderTokens.push(name);
+        resolved.push(name);
+        continue;
+      }
+
+      if(mapping.compose) {
+        const sub = this._resolveCompose(mapping.compose, item);
+        if(sub.emotion) emotion = sub.emotion;
+        if(sub.shape) shape = {...sub.shape, ...this._pickOverride(mapping, item)};
+        resolved.push(name);
+      } else if(mapping.arrangement || mapping.shape) {
+        shape = {...mapping, ...this._pickOverride({}, item)};
+        emotion = mapping;
+        resolved.push(name);
+      } else if(mapping.color || mapping.spread !== undefined) {
+        emotion = mapping;
         resolved.push(name);
       }
     }
@@ -446,8 +765,7 @@ class TokenEngine {
     return {
       emotion: emotion || this.assetPack.default_mapping,
       shape,
-      unknownTokens: this.pendingTokens.filter(p=>p.type==='unknown').map(p=>p.name),
-      unmappedTokens: this.pendingTokens.filter(p=>p.type==='unmapped').map(p=>p.name),
+      pendingRender: this.pendingRenderTokens,
     };
   }
 
@@ -469,7 +787,7 @@ class TokenEngine {
         const sub = this._resolveCompose(m.compose, parentItem);
         if(sub.emotion) emotion = sub.emotion;
         if(sub.shape) shape = sub.shape;
-      } else if(m.shape) {
+      } else if(m.arrangement || m.shape) {
         shape = m;
       } else if(m.color || m.spread !== undefined) {
         emotion = m;
@@ -480,16 +798,12 @@ class TokenEngine {
 
   _pickOverride(mapping, item) {
     const o = {};
-    if(item.hold !== undefined) o.hold = item.hold;
+    const it = typeof item === 'string' ? {} : item;
+    if(it.hold !== undefined) o.hold = it.hold;
     else if(mapping.hold !== undefined) o.hold = mapping.hold;
-    if(item.duration) o.duration = item.duration;
+    if(it.duration) o.duration = it.duration;
     else if(mapping.duration) o.duration = mapping.duration;
     return o;
-  }
-
-  addToken(name, display_name, category, trigger_hint) {
-    this.dictionary.tokens[name] = {display_name, category, trigger_hint};
-    this._saveDict();
   }
 
   addMapping(name, params) {
@@ -497,9 +811,17 @@ class TokenEngine {
     this._savePack();
   }
 
+  hasMapping(name) {
+    return !!this.assetPack.mappings[name];
+  }
+
   reset() {
     this.dictionary = JSON.parse(JSON.stringify(DEFAULT_DICTIONARY));
-    this.assetPack = JSON.parse(JSON.stringify(DEFAULT_ASSET_PACK));
+    this.allPacks = {};
+    const def = JSON.parse(JSON.stringify(DEFAULT_ASSET_PACK));
+    this.allPacks[def.id] = def;
+    this.activePackId = def.id;
+    this.assetPack = this.allPacks[def.id];
     this._saveDict();
     this._savePack();
   }
@@ -511,44 +833,126 @@ class TokenEngine {
 
 class PromptBuilder {
   build(dict) {
-    const cats = {emotion:[], shape:[], scene:[]};
-    for(const [n,d] of Object.entries(dict.tokens)) {
-      const list = cats[d.category] || cats.emotion;
-      let line = `- "${n}": ${d.display_name}`;
-      if(d.compose) line += ` (= ${d.compose.join('+')})`;
-      list.push(line);
-    }
-    const examples = dict.ai_examples.map(ex =>
-      `用户："${ex.user}"\n你：${JSON.stringify(ex.response)}`
-    ).join('\n\n');
+    const existingTokens = Object.keys(dict.tokens);
+    const mappedTokens = existingTokens.filter(n => engine.assetPack.mappings[n]);
+    const unmappedTokens = existingTokens.filter(n => !engine.assetPack.mappings[n]);
 
-    return `你是灵墨，一个有身体的AI。你的身体通过 Token 控制视觉表达。
+    let tokenRef = '';
+    if(mappedTokens.length) {
+      tokenRef += `\n## 已有视觉映射的 token（可直接复用）\n${mappedTokens.map(n => `- "${n}"`).join('\n')}`;
+    }
+    if(unmappedTokens.length) {
+      tokenRef += `\n## 记忆中但未生成映射的 token\n${unmappedTokens.map(n => `- "${n}"`).join('\n')}`;
+    }
+
+    return `你是灵墨，一个有身体的AI。你的身体是一个粒子系统，通过 Token 控制视觉表达。
 
 每次回复必须是 JSON：
-{"content":"你说的文字","tokens":["token_name"]}
+{"content":"你说的文字","tokens":["你的状态描述"]}
 
-token 可以是字符串或对象：
-- "happy"（默认效果）
-- {"name":"heart","hold":true}
+Token 是你对自身当前状态的独特表达——可以是一个词、一个短语、一句话，代表你此刻独一无二的感受。
 
-## 可用的情感 Token
-${cats.emotion.join('\n')}
+你可以自由创造任何 token。也可以复用已有的 token（它们已有预设的视觉映射）。
+${tokenRef}
 
-## 可用的形体 Token
-${cats.shape.join('\n')}
-
-## 可用的场景 Token（自动组合多个 token）
-${cats.scene.join('\n')}
-
-## 使用规则
-${dict.ai_rules}
+## 规则
+- 1-3 个 token，每个代表你状态的一个维度
+- token 是你对自身感受的自由表达，不是分类标签
+- 你可以用中文、英文、甚至一句话作为 token
+- 真实感受 > 标签化，具体 > 抽象
 
 ## 示例
-${examples}
+用户："你好" → {"content":"你好呀！看到你真开心","tokens":["阳光般的喜悦"]}
+用户："我很难过" → {"content":"让我陪着你","tokens":["温柔的陪伴","静静收缩的球形"]}
+用户："变成心形" → {"content":"送你一颗心","tokens":["heart"]}
+用户："我考了第一名" → {"content":"太棒了！恭喜你！","tokens":["绽放的金色烟花"]}
 
-记住：永远只返回一个 JSON 对象，不要任何其他文字。你可以自由使用上面没列出的新 token 名。`;
+记住：永远只返回一个 JSON 对象，不要任何其他文字。`;
   }
 }
+
+// ═══════════════════════════════════════════════════════
+// RENDERING ANALYZER
+// ═══════════════════════════════════════════════════════
+
+const RENDER_ANALYZER_PROMPT = `你是灵墨的视觉分析引擎。给定一个状态描述（token），为3D粒子可视化系统生成渲染参数。
+
+## 色彩氛围
+- color: [r,g,b]（0-1），主色调
+- spread: float（-0.5~0.5），正=扩散，负=收缩
+- speed: float（0~0.02），基础运动速度
+- breathe_amp: float（0~0.025），呼吸幅度
+- breathe_freq: float（0.5~2.5），呼吸频率Hz
+
+## 空间排列（arrangement）— 粒子在3D空间的形状分布
+- 几何：sphere ring heart star wave line spiral point cube torus helix grid diamond
+- 自然：cloud rain flame snow mountain ocean aurora waterfall tornado
+- 宇宙：galaxy nebula starfield comet blackhole supernova
+- 抽象：vortex fountain bloom dna lotus feather rainbow
+- arrangement_scale: float（0~1），排列大小
+
+## 持续运动（movement）— 粒子的持续动态效果
+- drift: 缓慢随机漂移（云团、雾气）
+- float_up: 缓缓上升（气泡、蒸汽）
+- fall_down: 缓缓下落（雨滴、落叶）
+- orbit: 环绕旋转（星球、回旋）
+- pulse: 脉冲扩缩（心跳、能量场）
+- spiral_motion: 螺旋运动（漩涡、龙卷风）
+- flicker: 闪烁抖动（火焰、电流）
+- flow: 定向流动（河流、风）
+- breathe_motion: 强烈呼吸起伏（生命体）
+- ripple: 波纹扩散（水面、声波）
+- sway: 摇曳摆动（花朵、树梢）
+- vibrate: 快速振动（颤抖、共鸣）
+- wave_motion: 波浪传播（海浪、声浪）
+- movement_speed: float（0.1~2），运动速度
+- movement_amplitude: float（0.1~1），运动幅度
+
+## 其他
+- duration: int（1000~5000），过渡时间ms
+- hold: boolean，是否保持（有movement时建议true）
+
+请分析状态的语义、情感、意境、视觉意象。选择最能表达视觉感受的 arrangement + movement 组合。
+例如："流动的云团"→ cloud + drift，"心跳加速"→ sphere + pulse，"星空"→ starfield + drift。
+
+返回纯 JSON：
+{"color":[r,g,b],"spread":...,"breathe_amp":...,"breathe_freq":...,"arrangement":"...","arrangement_scale":...,"movement":"...","movement_speed":...,"movement_amplitude":...,"duration":...,"hold":true/false,"reasoning":"简述"}`;
+
+let generatingSet = new Set();
+
+window.generateRendering = async function(name) {
+  if(generatingSet.has(name)) return;
+  if(!SIProviders.getApiKey()) { log('err','未配置 API Key，跳过生成'); return; }
+  generatingSet.add(name);
+  renderTokenList();
+
+  try {
+    const result = await SIProviders.call(RENDER_ANALYZER_PROMPT, [{role:'user', content: name}]);
+    const raw = result.content;
+    if(!raw) throw new Error('AI 返回空');
+
+    let params;
+    const cleaned = raw.replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,'').trim();
+    try { params = JSON.parse(cleaned); }
+    catch(e) {
+      const first = cleaned.indexOf('{');
+      const last = cleaned.lastIndexOf('}');
+      if(first >= 0 && last > first) params = JSON.parse(cleaned.slice(first, last+1));
+      else throw e;
+    }
+
+    const {reasoning, ...renderParams} = params;
+    engine.addMapping(name, renderParams);
+    log('action', `生成渲染: ${name} → ${reasoning || JSON.stringify(renderParams).slice(0,80)}`);
+    renderTokenList();
+    renderMappingList();
+  } catch(e) {
+    log('err', '生成渲染失败: ' + e.message);
+  } finally {
+    generatingSet.delete(name);
+    renderTokenList();
+  }
+};
 
 // ═══════════════════════════════════════════════════════
 // APP INIT
@@ -563,114 +967,230 @@ let N = engine.assetPack.config.particle_count || 100;
 localStorage.setItem('si_n', N);
 let isThinking = false;
 
-// ═══ UI ═══
-window.toggle = function(id) {
-  const el = document.getElementById(id);
-  const open = el.classList.contains('show');
-  ['cfg','dbg','packs'].forEach(p => document.getElementById(p).classList.remove('show'));
-  ['bCfg','bDbg','bPks'].forEach(b => { const e=document.getElementById(b); e.classList.remove('hide','on'); });
-  if(!open) {
-    el.classList.add('show');
-    if(id==='cfg') {
-      document.getElementById('bCfg').classList.add('hide');
-      document.getElementById('cPart').value = N;
-      updatePackInfo();
-    } else if(id==='dbg') {
-      document.getElementById('bDbg').classList.add('hide');
-    } else if(id==='packs') {
-      document.getElementById('bPks').classList.add('hide');
-      renderPackViewer();
-    }
-  }
-};
+// ═══ SIDEBAR UI ═══
 
-window.switchPackTab = function(tab) {
-  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('on'));
-  document.getElementById('ptDict').classList.remove('show');
-  document.getElementById('ptMap').classList.remove('show');
-  if(tab==='dict') {
-    document.querySelector('.ptab:first-child').classList.add('on');
-    document.getElementById('ptDict').classList.add('show');
+window.toggleSidebar = function(side) {
+  const sb = document.getElementById(side === 'left' ? 'sidebarLeft' : 'sidebarRight');
+  const btn = document.getElementById(side === 'left' ? 'bLeft' : 'bRight');
+  const isOpen = sb.classList.contains('open');
+  if(isOpen) {
+    sb.classList.remove('open');
+    btn.classList.remove('on');
   } else {
-    document.querySelector('.ptab:last-child').classList.add('on');
-    document.getElementById('ptMap').classList.add('show');
+    sb.classList.add('open');
+    btn.classList.add('on');
+    if(side === 'left') { renderTokenList(); renderPackSelect(); renderMappingList(); }
   }
 };
 
-function renderPackViewer() {
-  const d = engine.dictionary;
-  const p = engine.assetPack;
-
-  // Dictionary tab
-  const cats = {emotion:[], shape:[], scene:[]};
-  for(const [n,def] of Object.entries(d.tokens)) {
-    (cats[def.category] || cats.emotion).push({name:n, ...def});
+window.toggleSection = function(id) {
+  const body = document.getElementById('sec' + id.charAt(0).toUpperCase() + id.slice(1));
+  const header = document.getElementById('sec' + id.charAt(0).toUpperCase() + id.slice(1) + 'H');
+  const isShown = body.classList.contains('show');
+  if(isShown) {
+    body.classList.remove('show');
+    header.classList.remove('expanded');
+    body.style.maxHeight = '0';
+  } else {
+    body.classList.add('show');
+    header.classList.add('expanded');
+    body.style.maxHeight = '2000px';
   }
-  let dictHtml = `<div class="pk-hdr"><b>${d.name}</b> v${d.version} · ${Object.keys(d.tokens).length} tokens</div>`;
-  for(const [cat, items] of Object.entries(cats)) {
-    if(!items.length) continue;
-    dictHtml += `<div class="pk-section">${cat.toUpperCase()} (${items.length})</div>`;
-    for(const item of items) {
-      const compose = item.compose ? ` = ${item.compose.join('+')}` : '';
-      dictHtml += `<div class="pk-item">
-        <span class="pk-name">${item.name}</span>
-        <span class="pk-cat ${cat}">${cat}</span>
-        <span class="pk-detail">${item.display_name}${compose ? compose : ''} · ${item.trigger_hint||''}</span>
+};
+
+function renderPackSelect() {
+  const sel = document.getElementById('packSelect');
+  if(!sel) return;
+  const packs = engine.listPacks();
+  sel.innerHTML = packs.map(p => `<option value="${p.id}" ${p.active?'selected':''}>${p.name} (${p.count})</option>`).join('');
+}
+
+window.switchPack = function(id) {
+  engine.switchPack(id);
+  renderPackSelect();
+  renderMappingList();
+  renderTokenList();
+  updateSidebarInfo();
+};
+
+window.createNewPack = function() {
+  const name = prompt('新素材包名称：');
+  if(!name) return;
+  const id = engine.createPack(name);
+  engine.switchPack(id);
+  renderPackSelect();
+  renderMappingList();
+  renderTokenList();
+  updateSidebarInfo();
+  log('action', '新建素材包: ' + name);
+};
+
+window.exportPack = function() {
+  const data = engine.exportPackData();
+  const blob = new Blob([data], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = engine.assetPack.name + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+window.importPack = function(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      const id = engine.importPackData(data);
+      engine.switchPack(id);
+      renderPackSelect();
+      renderMappingList();
+      renderTokenList();
+      updateSidebarInfo();
+      log('action', '导入素材包: ' + (data.name || id));
+    } catch(err) {
+      alert('导入失败: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+};
+
+function renderTokenList() {
+  const d = engine.dictionary;
+  const search = (document.getElementById('tokenSearch')?.value || '').toLowerCase().trim();
+  const container = document.getElementById('tokenList');
+  if(!container) return;
+
+  let mapped = [], unmapped = [];
+  for(const [n] of Object.entries(d.tokens)) {
+    if(search && !n.toLowerCase().includes(search)) continue;
+    if(engine.hasMapping(n)) mapped.push(n);
+    else unmapped.push(n);
+  }
+
+  let html = '';
+
+  if(mapped.length) {
+    html += `<div class="pk-section">已映射 (${mapped.length})</div>`;
+    for(const name of mapped) {
+      const m = engine.assetPack.mappings[name];
+      const hasColor = m && m.color;
+      const isActive = engine.activeTokenNames.includes(name);
+      const dotStyle = hasColor
+        ? `background:rgb(${Math.round(m.color[0]*255)},${Math.round(m.color[1]*255)},${Math.round(m.color[2]*255)})`
+        : '';
+      html += `<div class="tk-item ${isActive ? 'active' : ''}" onclick="previewMapping('${name.replace(/'/g,"\\'")}')">
+        <span class="tk-dot" style="${dotStyle}"></span>
+        <span class="tk-name">${name}</span>
+        <button class="tk-gen ${generatingSet.has(name)?'loading':''}" onclick="event.stopPropagation();generateRendering('${name.replace(/'/g,"\\'")}')">${generatingSet.has(name)?'生成中...':'重新渲染'}</button>
       </div>`;
     }
   }
-  document.getElementById('ptDict').innerHTML = dictHtml;
 
-  // Mapping tab
-  const emotionMappings = [], shapeMappings = [], sceneMappings = [], otherMappings = [];
+  if(unmapped.length) {
+    html += `<div class="pk-section">待生成 (${unmapped.length})</div>`;
+    for(const name of unmapped) {
+      const isActive = engine.activeTokenNames.includes(name);
+      const isLoading = generatingSet.has(name);
+      html += `<div class="tk-item ${isActive ? 'active' : ''}">
+        <span class="tk-dot"></span>
+        <span class="tk-name">${name}</span>
+        <button class="tk-gen ${isLoading ? 'loading' : ''}" onclick="generateRendering('${name.replace(/'/g,"\\'")}')">${isLoading ? '生成中...' : '生成渲染'}</button>
+      </div>`;
+    }
+  }
+
+  if(!html) html = '<div class="tk-empty">暂无 token</div>';
+  container.innerHTML = html;
+  updateSidebarInfo();
+}
+window.renderTokenList = renderTokenList;
+
+function renderMappingList() {
+  const p = engine.assetPack;
+  const container = document.getElementById('mappingList');
+  if(!container) return;
+
+  const colorMappings = [], arrangementMappings = [], composeMappings = [];
   for(const [n,m] of Object.entries(p.mappings)) {
-    if(m.compose) sceneMappings.push({name:n,...m});
-    else if(m.shape) shapeMappings.push({name:n,...m});
-    else if(m.color || m.spread !== undefined) emotionMappings.push({name:n,...m});
-    else otherMappings.push({name:n,...m});
+    if(m.compose) composeMappings.push({name:n,...m});
+    else if(m.arrangement || m.shape) arrangementMappings.push({name:n,...m});
+    else if(m.color || m.spread !== undefined) colorMappings.push({name:n,...m});
   }
 
-  let mapHtml = `<div class="pk-hdr"><b>${p.name}</b> v${p.version} · renderer: ${p.renderer} · ${Object.keys(p.mappings).length} mappings</div>`;
-  mapHtml += `<div class="pk-section">DEFAULT MAPPING</div>`;
-  const dm = p.default_mapping;
-  if(dm && dm.color) {
-    mapHtml += `<div class="pk-item">
-      <span class="pk-color" style="background:rgb(${Math.round(dm.color[0]*255)},${Math.round(dm.color[1]*255)},${Math.round(dm.color[2]*255)})"></span>
-      <span class="pk-mapping">color:[${dm.color.map(c=>c.toFixed(2)).join(', ')}] spread:${dm.spread} breathe:${dm.breathe_amp}/${dm.breathe_freq}</span>
-    </div>`;
-  }
+  let html = `<div class="pk-hdr"><b>${p.name}</b> · ${Object.keys(p.mappings).length} mappings</div>`;
 
-  if(emotionMappings.length) {
-    mapHtml += `<div class="pk-section">EMOTION (${emotionMappings.length})</div>`;
-    for(const m of emotionMappings) {
+window.previewMapping = function(name) {
+    const m = engine.assetPack.mappings[name];
+    if(!m) return;
+    if(m.compose) {
+      const sub = engine._resolveCompose(m.compose, {});
+      if(sub.emotion) springPool.applyEmotion(sub.emotion);
+      if(sub.shape) { actionQueue=[]; currentAction=null; heldAction=null; queueShapeAction({...sub.shape, ...(m.hold!==undefined?{hold:m.hold}:{}), duration:m.duration||2500}); }
+    } else if(m.arrangement || m.shape) {
+      actionQueue=[]; currentAction=null; heldAction=null;
+      queueShapeAction(m);
+      if(m.color) springPool.applyEmotion(m);
+    } else if(m.color || m.spread !== undefined) {
+      springPool.applyEmotion(m);
+    }
+    engine.activeTokenNames = [name];
+    updateTokenTags();
+    log('action', '预览: ' + name);
+  };
+
+  if(colorMappings.length) {
+    html += `<div class="pk-section">色彩 (${colorMappings.length})</div>`;
+    for(const m of colorMappings) {
       const c = m.color || [0.4,0.4,0.45];
-      mapHtml += `<div class="pk-item">
+      html += `<div class="pk-item" onclick="previewMapping('${m.name.replace(/'/g,"\\'")}')">
         <span class="pk-color" style="background:rgb(${Math.round(c[0]*255)},${Math.round(c[1]*255)},${Math.round(c[2]*255)})"></span>
         <span class="pk-name">${m.name}</span>
-        <span class="pk-mapping">spread:${(m.spread||0).toFixed(2)} spd:${(m.speed||0).toFixed(3)} breath:${(m.breathe_amp||0).toFixed(3)}/${m.breathe_freq||1}</span>
+        <span class="pk-mapping">spd:${(m.speed||0).toFixed(3)}</span>
       </div>`;
     }
   }
-  if(shapeMappings.length) {
-    mapHtml += `<div class="pk-section">SHAPE (${shapeMappings.length})</div>`;
-    for(const m of shapeMappings) {
-      mapHtml += `<div class="pk-item">
+  if(arrangementMappings.length) {
+    html += `<div class="pk-section">排列+运动 (${arrangementMappings.length})</div>`;
+    for(const m of arrangementMappings) {
+      const arr = m.arrangement || m.shape || '?';
+      const mov = m.movement ? `→${m.movement}` : '';
+      const c = m.color || [0.4,0.4,0.45];
+      html += `<div class="pk-item" onclick="previewMapping('${m.name.replace(/'/g,"\\'")}')">
+        <span class="pk-color" style="background:rgb(${Math.round(c[0]*255)},${Math.round(c[1]*255)},${Math.round(c[2]*255)})"></span>
         <span class="pk-name">${m.name}</span>
-        <span class="pk-mapping">${m.shape} tight:${m.tightness} ${m.motion_speed} ${m.duration}ms${m.hold?' HOLD':''}</span>
+        <span class="pk-mapping">${arr}${mov}</span>
       </div>`;
     }
   }
-  if(sceneMappings.length) {
-    mapHtml += `<div class="pk-section">SCENE (${sceneMappings.length})</div>`;
-    for(const m of sceneMappings) {
-      mapHtml += `<div class="pk-item">
+  if(composeMappings.length) {
+    html += `<div class="pk-section">组合 (${composeMappings.length})</div>`;
+    for(const m of composeMappings) {
+      html += `<div class="pk-item" onclick="previewMapping('${m.name.replace(/'/g,"\\'")}')">
         <span class="pk-name">${m.name}</span>
-        <span class="pk-mapping">${m.compose.join(' + ')} ${m.duration}ms${m.hold?' HOLD':''}</span>
+        <span class="pk-mapping">${m.compose.join(' + ')}</span>
       </div>`;
     }
   }
-  document.getElementById('ptMap').innerHTML = mapHtml;
+  if(!colorMappings.length && !arrangementMappings.length && !composeMappings.length) {
+    html += '<div style="text-align:center;padding:10px 0;color:rgba(100,140,180,0.15);font-size:10px">空素材包</div>';
+  }
+
+  container.innerHTML = html;
 }
+
+function updateSidebarInfo() {
+  const d = engine.dictionary;
+  const p = engine.assetPack;
+  const mapped = Object.keys(d.tokens).filter(n => p.mappings[n]).length;
+  const total = Object.keys(d.tokens).length;
+  const dictInfo = document.getElementById('dictInfo');
+  if(dictInfo) dictInfo.textContent = `${total} tokens · ${mapped} 已映射`;
+}
+
+// ═══ CONFIG ═══
 
 window.saveCfg = function() {
   const cfg = SIProviders.save(() => {
@@ -682,92 +1202,43 @@ window.saveCfg = function() {
   engine._savePack();
   localStorage.setItem('si_n', N);
   rebuildBody(N);
-  updatePackInfo();
+  updateSidebarInfo();
 };
 
 window.testCfg = function() { SIProviders.test(); };
 
 window.resetPacks = function() {
-  if(confirm('确定重置词典和素材包到默认状态？')) {
+  if(confirm('确定重置词典和所有素材包到默认状态？')) {
     engine.reset();
     N = engine.assetPack.config.particle_count || 100;
     localStorage.setItem('si_n', N);
     document.getElementById('cPart').value = N;
     rebuildBody(N);
     springPool.applyDefault(engine.assetPack.default_mapping);
-    updatePackInfo();
-    log('action','词典和素材包已重置');
+    renderTokenList();
+    renderPackSelect();
+    renderMappingList();
+    log('action','已重置');
   }
 };
-
-function updatePackInfo() {
-  document.getElementById('dictInfo').textContent = `${engine.dictionary.name} (${Object.keys(engine.dictionary.tokens).length} tokens)`;
-  document.getElementById('packInfo').textContent = `${engine.assetPack.name} (${Object.keys(engine.assetPack.mappings).length} mappings)`;
-}
 
 SIProviders.init();
 
 // ═══ DEBUG ═══
-const $d = document.getElementById('dbgBody');
 function log(type, text) {
+  const $d = document.getElementById('dbgBody');
+  if(!$d) return;
   const cls = {div:'hr.dd',label:'dl',meta:'dm',json:'dj',err:'de',reply:'dr',action:'da'}[type]||'';
   if(type==='div') $d.insertAdjacentHTML('beforeend','<hr class="dd">');
   else $d.insertAdjacentHTML('beforeend','<div class="'+cls+'">'+text+'</div>');
   $d.scrollTop = $d.scrollHeight;
 }
-function setStatus(t,cls){const e=document.getElementById('status');e.textContent=t;e.className=cls||''}
 
-// ═══ NEW TOKEN UI ═══
-let pendingNewTokens = [];
-
-function showNewTokenBanner(tokens) {
-  if(!tokens.length) return;
-  pendingNewTokens = tokens;
-  const banner = document.getElementById('newTokenBanner');
-  banner.innerHTML = `检测到新 token: <span class="ntb-name">${tokens.join(', ')}</span> — 点击添加到词典`;
-  banner.style.display = 'block';
+function showReply(text) {
+  const el = document.getElementById('aiReply');
+  el.textContent = text;
+  el.classList.add('show');
 }
-
-window.showTokenForm = function() {
-  if(!pendingNewTokens.length) return;
-  const name = pendingNewTokens[0];
-  document.getElementById('tfName').value = name;
-  document.getElementById('tfDisplay').value = '';
-  document.getElementById('tfCategory').value = 'emotion';
-  document.getElementById('tfTrigger').value = '';
-  document.getElementById('tfColor').value = '';
-  document.getElementById('tokenForm').style.display = 'block';
-  document.getElementById('newTokenBanner').style.display = 'none';
-  document.getElementById('tfDisplay').focus();
-};
-
-window.hideTokenForm = function() {
-  document.getElementById('tokenForm').style.display = 'none';
-  pendingNewTokens.shift();
-  if(pendingNewTokens.length) showNewTokenBanner(pendingNewTokens);
-};
-
-window.confirmAddToken = function() {
-  const name = document.getElementById('tfName').value.trim();
-  const display = document.getElementById('tfDisplay').value.trim() || name;
-  const category = document.getElementById('tfCategory').value;
-  const trigger = document.getElementById('tfTrigger').value.trim() || '';
-  engine.addToken(name, display, category, trigger);
-
-  const colorStr = document.getElementById('tfColor').value.trim();
-  if(colorStr) {
-    const parts = colorStr.split(',').map(Number);
-    if(parts.length===3 && parts.every(n=>!isNaN(n))) {
-      engine.addMapping(name, {color:parts, spread:0, speed:0.001, breathe_amp:0.006, breathe_freq:1.0});
-    }
-  } else {
-    const def = engine.assetPack.default_mapping;
-    engine.addMapping(name, {...def});
-  }
-  log('action','添加新 token: ' + name + ' (' + category + ')');
-  hideTokenForm();
-  updatePackInfo();
-};
 
 // ═══════════════════════════════════════════════════════
 // PARTICLE SYSTEM
@@ -829,23 +1300,26 @@ let currentAction = null;
 let actionProgress = 0;
 let heldAction = null;
 
-function queueShapeAction(shapeMapping) {
-  const shapeName = shapeMapping.shape;
-  const fn = SHAPES[shapeName];
-  if(!fn) { log('action','⚠ 未知形状: '+shapeName); return; }
-
-  const tightness = Math.max(0, Math.min(1, shapeMapping.tightness ?? 0.5));
+function queueShapeAction(mapping) {
+  const arrName = mapping.arrangement || mapping.shape;
+  const fn = ARRANGEMENTS[arrName];
+  if(!fn) { log('action','未知排列: '+arrName); return; }
+  const scale = Math.max(0, Math.min(1, mapping.arrangement_scale ?? mapping.tightness ?? 0.5));
   const speedMap = {slow:0.006, normal:0.018, fast:0.045};
-  const speed = speedMap[shapeMapping.motion_speed] || 0.018;
-  const duration = shapeMapping.duration || 2500;
-  const hold = shapeMapping.hold || false;
+  const speed = speedMap[mapping.motion_speed] || 0.018;
+  const duration = mapping.duration || 2500;
+  const hold = mapping.hold || false;
   const targets = [];
-
   for(let i=0; i<N; i++) {
-    const [tx,ty,tz] = fn(i, N, {tightness});
+    const [tx,ty,tz] = fn(i, N, {scale, tightness:scale});
     targets.push({index:i, tx, ty, tz});
   }
-  actionQueue.push({targets, duration, speed, name:'shape-'+shapeName, hold, startTime:null});
+  actionQueue.push({
+    targets, duration, speed,
+    name:'shape-'+arrName, hold, startTime:null,
+    movement: mapping.movement || null,
+    movementParams: mapping,
+  });
 }
 
 // ═══════════════════════════════════════════════════════
@@ -886,16 +1360,11 @@ function updatePhysics(dt, time) {
   }
 
   const sv = springPool.vals();
-  const cr=sv.color_r, cg=sv.color_g, cb=sv.color_b;
   const spread=sv.spread, breatheAmp=sv.breathe_amp, breatheFreq=sv.breathe_freq;
 
   for(let i=0; i<N; i++) {
     const p = particles[i];
-
-    // breathing
     p.y += Math.sin(time * breatheFreq + p.phase) * breatheAmp * 0.15 * 0.02;
-
-    // repulsion
     for(let j=i+1; j<N && j<i+8; j++) {
       const q=particles[j];
       const dx=p.x-q.x, dy=p.y-q.y, dz=p.z-q.z;
@@ -906,29 +1375,27 @@ function updatePhysics(dt, time) {
         q.vx-=dx*f; q.vy-=dy*f; q.vz-=dz*f;
       }
     }
-
-    // spread/contraction
     if(Math.abs(spread)>0.001) {
       const d=Math.sqrt(p.x*p.x+p.y*p.y)||0.01;
       p.vx+=(p.x/d)*spread*0.0003;
       p.vy+=(p.y/d)*spread*0.0003;
     }
-
-    // shape targeting
     const activeTarget = (p.hasTarget && currentAction) || heldAction;
     if(activeTarget) {
+      let etx=p.tx, ety=p.ty, etz=p.tz;
+      if(activeTarget.movement && MOVEMENTS[activeTarget.movement]) {
+        const [mx,my,mz]=MOVEMENTS[activeTarget.movement](i, N, time, activeTarget.movementParams||{}, p);
+        etx+=mx; ety+=my; etz+=mz;
+      }
       const stiffness = currentAction ? (currentAction.speed||0.02) : 0.08;
       const ease = smoothstep(currentAction ? actionProgress : 1);
-      p.vx+=(p.tx-p.x)*stiffness*(1+ease);
-      p.vy+=(p.ty-p.y)*stiffness*(1+ease);
-      p.vz+=(p.tz-p.z)*stiffness*(1+ease);
+      p.vx+=(etx-p.x)*stiffness*(1+ease);
+      p.vy+=(ety-p.y)*stiffness*(1+ease);
+      p.vz+=(etz-p.z)*stiffness*(1+ease);
     }
-
-    // boundary
     if(Math.abs(p.x)>1.5) p.vx-=p.x*0.002;
     if(Math.abs(p.y)>1.2) p.vy-=p.y*0.002;
     if(Math.abs(p.z)>0.8) p.vz-=p.z*0.002;
-
     p.vx*=0.88; p.vy*=0.88; p.vz*=0.88;
     p.x+=p.vx; p.y+=p.vy; p.z+=p.vz;
   }
@@ -975,7 +1442,6 @@ addEventListener('resize', () => {
   comp.setSize(innerWidth, innerHeight);
 });
 
-// decorative particles
 const DN=40;
 const dP=new Float32Array(DN*3);
 const dV=[];
@@ -998,9 +1464,9 @@ scene.add(new THREE.Points(dG, dM));
 // ═══════════════════════════════════════════════════════
 
 async function callAI(text) {
-  if(!SIProviders.getApiKey()) { setStatus('请先配置 API Key（右上角⚙）','err'); return null; }
+  if(!SIProviders.getApiKey()) { showReply('请先配置 API Key（右上角 ⚙）'); return null; }
   document.getElementById('sendBtn').disabled = true;
-  setStatus('…','think');
+  showReply('...');
 
   log('div','');
   log('label','请求 '+new Date().toLocaleTimeString());
@@ -1019,7 +1485,7 @@ async function callAI(text) {
     } catch(e) {
       if(e.message.includes('429')) {
         log('meta','速率限制，5秒后重试...');
-        setStatus('⏳ 速率限制','think');
+        showReply('速率限制，等待中...');
         await new Promise(r2=>setTimeout(r2,5000));
         result = await SIProviders.call(systemMsg, userMessages);
       } else throw e;
@@ -1029,7 +1495,7 @@ async function callAI(text) {
     log('meta','耗时 '+sec+'s · tokens: '+result.usage.input+'+'+result.usage.output+'='+result.usage.total);
 
     const raw = result.content;
-    if(!raw) { log('err','AI返回空'); setStatus('❌ 空响应','err'); isThinking=false; return null; }
+    if(!raw) { log('err','AI返回空'); showReply('空响应'); isThinking=false; return null; }
 
     log('label','AI 回复');
     log('json', raw.length>800 ? raw.slice(0,800)+'...' : raw);
@@ -1061,25 +1527,19 @@ async function callAI(text) {
 
     const reply = parsed.content || raw;
     if(reply) {
-      log('reply', reply);
-      setStatus(reply);
+      showReply(reply);
       conversationHistory.push({role:'assistant', content: raw});
     }
 
-    // Process tokens
     const tokenInputs = parsed.tokens || parsed.body?.tokens || [];
     if(tokenInputs.length) {
       log('label','Token 解析');
       log('json', JSON.stringify(tokenInputs));
 
       const resolved = engine.resolve(tokenInputs);
+      log('action','tokens: ' + engine.activeTokenNames.join(', '));
 
-      log('action','🎭 tokens: ' + engine.activeTokenNames.join(', '));
-
-      if(resolved.emotion) {
-        springPool.applyEmotion(resolved.emotion);
-      }
-
+      if(resolved.emotion) springPool.applyEmotion(resolved.emotion);
       if(resolved.shape) {
         actionQueue = [];
         currentAction = null;
@@ -1087,10 +1547,21 @@ async function callAI(text) {
         queueShapeAction(resolved.shape);
       }
 
-      const unknowns = [...resolved.unknownTokens, ...resolved.unmappedTokens];
-      if(unknowns.length) {
-        showNewTokenBanner(unknowns);
-        log('action','⚠ 新 token: ' + unknowns.join(', '));
+      if(resolved.pendingRender.length) {
+        log('action','自动生成渲染: ' + resolved.pendingRender.join(', '));
+        (async () => {
+          for(const name of resolved.pendingRender) {
+            await generateRendering(name);
+          }
+          const autoResolved = engine.resolve(resolved.pendingRender);
+          if(autoResolved.emotion) springPool.applyEmotion(autoResolved.emotion);
+          if(autoResolved.shape) {
+            actionQueue=[]; currentAction=null; heldAction=null;
+            queueShapeAction(autoResolved.shape);
+          }
+          updateTokenTags();
+          renderMappingList();
+        })();
       }
 
       updateTokenTags();
@@ -1100,7 +1571,7 @@ async function callAI(text) {
     return parsed;
   } catch(e) {
     log('err', e.message);
-    setStatus('❌ '+e.message,'err');
+    showReply('错误: '+e.message);
     isThinking = false;
     return null;
   } finally {
@@ -1113,6 +1584,7 @@ function updateTokenTags() {
   el.innerHTML = engine.activeTokenNames.map(n =>
     `<span class="ttag">${n}</span>`
   ).join('');
+  renderTokenList();
 }
 
 // ═══ SEND ═══
@@ -1150,11 +1622,9 @@ function animate() {
   springPool.update(dt);
   updatePhysics(dt, t);
 
-  // bloom dynamic update
   const sv = springPool.vals();
   bloomPass.strength = sv.bloom_strength;
 
-  // thinking animation
   if(isThinking) {
     mesh.rotation.y += dt*0.5;
     mesh.rotation.x = Math.sin(t*0.3)*0.15;
@@ -1163,7 +1633,6 @@ function animate() {
     mesh.rotation.x += (0-mesh.rotation.x)*0.03;
   }
 
-  // sync to GPU
   const pA = geo.attributes.position.array;
   const cA = geo.attributes.aColor.array;
   const cr=sv.color_r, cg=sv.color_g, cb=sv.color_b;
@@ -1177,7 +1646,6 @@ function animate() {
   geo.attributes.position.needsUpdate = true;
   geo.attributes.aColor.needsUpdate = true;
 
-  // decorative particles
   const dpA = dG.attributes.position.array;
   for(let i=0;i<DN;i++){
     const v=dV[i];
@@ -1193,8 +1661,7 @@ function animate() {
 animate();
 
 log('label','灵墨 v4.0 启动');
-log('meta','粒子: '+N+' · 词典: '+Object.keys(engine.dictionary.tokens).length+' tokens · 映射: '+Object.keys(engine.assetPack.mappings).length);
-log('meta','架构: Token词典 → 素材映射包 → SpringPool → 渲染');
+log('meta','粒子: '+N+' · 词典: '+Object.keys(engine.dictionary.tokens).length+' tokens · 素材包: '+engine.assetPack.name+' ('+Object.keys(engine.assetPack.mappings).length+')');
 </script>
 </body>
 </html>

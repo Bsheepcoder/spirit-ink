@@ -18,13 +18,14 @@ window.SIProviders = (() => {
     {
       id: 'zhipu',
       name: '智谱 GLM',
-      apiBase: 'https://open.bigmodel.cn/api/coding/paas/v4/chat/completions',
+      apiBase: 'https://open.bigmodel.cn/api/coding/paas/v4',
       models: [
         { id: 'glm-4.5-air',  name: 'GLM-4.5-Air · 性价比' },
         { id: 'glm-4.6',      name: 'GLM-4.6 · 超强' },
         { id: 'glm-4.7',      name: 'GLM-4.7 · 高智能' },
         { id: 'glm-5-turbo',  name: 'GLM-5-Turbo · 长程' },
         { id: 'glm-5',        name: 'GLM-5 · 旗舰' },
+        { id: 'glm-5.1',      name: 'GLM-5.1 · 最新' },
       ]
     },
     {
@@ -82,7 +83,7 @@ window.SIProviders = (() => {
     sel.onchange = _onProviderChange;
     _onProviderChange();
     document.getElementById('cKey').value = _apiKey;
-    if (_apiKey) document.getElementById('bCfg').classList.add('on');
+    if (_apiKey) document.getElementById('bRight').classList.add('on');
   }
 
   function save(getParticleCount) {
@@ -98,7 +99,7 @@ window.SIProviders = (() => {
     localStorage.setItem('si_apiBase', _customUrl);
 
     _cfgMsg('✓ 已保存 (' + _get().name + ' / ' + _model + ' / 粒子:' + N + ')', true);
-    if (_apiKey) document.getElementById('bCfg').classList.add('on');
+    if (_apiKey) document.getElementById('bRight').classList.add('on');
     return { providerId: _providerId, apiKey: _apiKey, model: _model, N };
   }
 
@@ -108,7 +109,8 @@ window.SIProviders = (() => {
     _cfgMsg('测试中...', true);
     const p = _get();
     const mid = document.getElementById('cModel').value;
-    const url = p.customApiBase ? document.getElementById('cApiBase').value.trim() : p.apiBase;
+    const baseUrl = p.customApiBase ? document.getElementById('cApiBase').value.trim() : p.apiBase;
+    const url = baseUrl.replace(/\/+$/, '') + '/chat/completions';
     if (!url) { _cfgMsg('✗ 请填写API地址', false); return; }
     try {
       const body = JSON.stringify({ model: mid, messages: [{ role: 'user', content: 'hi' }], max_tokens: 20 });
@@ -124,7 +126,8 @@ window.SIProviders = (() => {
   async function call(systemPrompt, messages, opts = {}) {
     const { maxTokens = 4096, temperature = 0.85 } = opts;
     const p = _get();
-    const url = p.customApiBase ? _customUrl : p.apiBase;
+    const baseUrl = p.customApiBase ? _customUrl : p.apiBase;
+    const url = baseUrl.replace(/\/+$/, '') + '/chat/completions';
 
     const body = JSON.stringify({
       model: _model,
