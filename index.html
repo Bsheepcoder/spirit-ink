@@ -3,27 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spirit Ink · 灵墨 v3.0</title>
+<title>Spirit Ink · 灵墨 v4.0</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;overflow:hidden;background:#08080f;font-family:'Segoe UI',system-ui,sans-serif}
 canvas{display:block;position:fixed;top:0;left:0;z-index:0}
 .watermark{position:fixed;bottom:16px;left:16px;z-index:5;color:rgba(100,140,180,0.08);font-size:9px;letter-spacing:3px;pointer-events:none}
 .fps{position:fixed;top:10px;left:10px;z-index:5;color:rgba(100,150,200,0.12);font-size:9px;pointer-events:none}
-
 .toolbar{position:fixed;top:10px;right:10px;z-index:20;display:flex;gap:6px}
 .tbtn{width:30px;height:30px;border-radius:7px;border:1px solid rgba(80,140,200,0.08);background:rgba(8,8,20,0.5);color:rgba(130,170,210,0.35);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .tbtn:hover{color:rgba(160,200,240,0.6);border-color:rgba(80,140,200,0.2)}
 .tbtn.on{color:rgba(100,200,140,0.6);border-color:rgba(100,200,140,0.15)}
 .tbtn.hide{display:none}
-
 .pnl{position:fixed;z-index:25;background:rgba(6,6,14,0.92);backdrop-filter:blur(20px);border:1px solid rgba(80,140,200,0.06);border-radius:10px;display:none;flex-direction:column;color:rgba(160,190,220,0.55);font-size:12px}
 .pnl.show{display:flex}
 .pnl-h{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(80,140,200,0.05);font-size:10px;letter-spacing:1px;color:rgba(130,170,210,0.35)}
 .pnl-h button{background:none;border:none;color:rgba(130,170,210,0.25);cursor:pointer;font-size:14px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:4px}
 .pnl-h button:hover{background:rgba(80,140,200,0.1);color:rgba(160,200,240,0.5)}
 .pnl-b{flex:1;overflow-y:auto;padding:10px 12px}
-
 #cfg{top:10px;right:10px;width:280px}
 #cfg label{display:block;color:rgba(130,170,210,0.35);font-size:10px;margin:10px 0 4px;letter-spacing:0.5px}
 #cfg input,#cfg select{width:100%;background:rgba(80,140,200,0.04);border:1px solid rgba(80,140,200,0.08);color:rgba(180,210,230,0.7);padding:7px 10px;border-radius:6px;font-size:11px;outline:none;font-family:inherit}
@@ -38,7 +35,6 @@ canvas{display:block;position:fixed;top:0;left:0;z-index:0}
 .cmsg.show{display:block}
 .cmsg.ok{color:rgba(100,180,120,0.6);background:rgba(100,180,120,0.05)}
 .cmsg.err{color:rgba(200,100,100,0.6);background:rgba(200,100,100,0.05)}
-
 #dbg{top:10px;right:10px;width:380px;max-height:60vh}
 #dbg .pnl-b{font-family:'Cascadia Code','Consolas',monospace;font-size:10px;line-height:1.6}
 .dl{color:rgba(100,160,200,0.35);font-size:9px;margin:8px 0 3px;letter-spacing:1px;text-transform:uppercase}
@@ -48,8 +44,7 @@ canvas{display:block;position:fixed;top:0;left:0;z-index:0}
 .dr{color:rgba(200,220,180,0.65);font-family:'Segoe UI',sans-serif;font-size:12px;padding:6px 8px;margin:4px 0;background:rgba(100,160,80,0.05);border-radius:4px;border-left:2px solid rgba(100,160,80,0.2)}
 .da{color:rgba(200,170,100,0.55);padding:4px 8px;margin:2px 0;background:rgba(200,170,100,0.04);border-radius:3px;border-left:2px solid rgba(200,170,100,0.15)}
 hr.dd{border:none;border-top:1px solid rgba(80,140,200,0.04);margin:8px 0}
-
-#inp{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:8px;width:min(520px,92vw)}
+#inp{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:6px;width:min(520px,92vw)}
 .irow{display:flex;gap:8px;align-items:center;width:100%;background:rgba(8,8,18,0.7);backdrop-filter:blur(16px);border:1px solid rgba(80,140,200,0.06);border-radius:12px;padding:8px 12px}
 .irow input{flex:1;background:none;border:none;outline:none;color:rgba(180,200,220,0.75);font-size:13px;padding:4px 0;font-family:inherit}
 .irow input::placeholder{color:rgba(130,170,210,0.15)}
@@ -60,14 +55,47 @@ hr.dd{border:none;border-top:1px solid rgba(80,140,200,0.04);margin:8px 0}
 #status{font-size:11px;color:rgba(160,200,160,0.4);min-height:18px;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .3s}
 #status.err{color:rgba(200,100,100,0.5)}
 #status.think{color:rgba(100,150,200,0.3)}
+#tokenTags{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;min-height:0}
+.ttag{font-size:9px;padding:2px 6px;border-radius:3px;background:rgba(80,140,200,0.08);color:rgba(140,180,220,0.45);letter-spacing:0.5px}
+#newTokenBanner{display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:15;background:rgba(200,170,60,0.1);border:1px solid rgba(200,170,60,0.15);border-radius:8px;padding:8px 14px;font-size:11px;color:rgba(200,180,100,0.7);cursor:pointer;max-width:min(480px,90vw);text-align:center;transition:all .3s}
+#newTokenBanner:hover{background:rgba(200,170,60,0.15)}
+#newTokenBanner .ntb-name{color:rgba(220,200,120,0.9);font-weight:bold}
+#tokenForm{display:none;position:fixed;z-index:30;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(10,10,22,0.96);backdrop-filter:blur(20px);border:1px solid rgba(80,140,200,0.1);border-radius:12px;padding:16px 20px;width:320px;color:rgba(160,190,220,0.55);font-size:12px}
+#tokenForm h3{font-size:12px;letter-spacing:1px;color:rgba(130,170,210,0.5);margin-bottom:12px;font-weight:normal}
+#tokenForm label{display:block;color:rgba(130,170,210,0.35);font-size:10px;margin:8px 0 3px}
+#tokenForm input,#tokenForm select{width:100%;background:rgba(80,140,200,0.04);border:1px solid rgba(80,140,200,0.08);color:rgba(180,210,230,0.7);padding:6px 8px;border-radius:5px;font-size:11px;outline:none;font-family:inherit}
+#tokenForm select option{background:#0a0a18;color:#90b0c8}
+.tf-btns{display:flex;gap:6px;margin-top:14px}
+#packs{top:10px;right:10px;width:420px;max-height:70vh}
+#packs .pnl-b{padding:0}
+.ptabs{display:flex;border-bottom:1px solid rgba(80,140,200,0.05)}
+.ptab{flex:1;padding:8px;text-align:center;font-size:10px;letter-spacing:1px;color:rgba(130,170,210,0.3);cursor:pointer;border:none;background:none;font-family:inherit;transition:all .2s}
+.ptab:hover{color:rgba(160,200,240,0.5)}
+.ptab.on{color:rgba(130,200,160,0.7);border-bottom:2px solid rgba(130,200,160,0.3)}
+.ptab-content{display:none;padding:10px 12px;overflow-y:auto;max-height:calc(70vh - 100px)}
+.ptab-content.show{display:block}
+.pk-hdr{font-size:10px;color:rgba(130,170,210,0.35);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(80,140,200,0.04)}
+.pk-hdr b{color:rgba(160,190,220,0.55);font-weight:normal}
+.pk-item{padding:5px 8px;margin:2px 0;border-radius:4px;font-size:11px;display:flex;align-items:center;gap:8px}
+.pk-item:hover{background:rgba(80,140,200,0.04)}
+.pk-name{color:rgba(180,210,230,0.7);font-family:'Cascadia Code','Consolas',monospace;font-size:10px;min-width:90px}
+.pk-cat{font-size:9px;padding:1px 5px;border-radius:3px;letter-spacing:0.5px}
+.pk-cat.emotion{background:rgba(200,170,60,0.1);color:rgba(200,180,100,0.6)}
+.pk-cat.shape{background:rgba(80,180,130,0.1);color:rgba(100,200,150,0.6)}
+.pk-cat.scene{background:rgba(140,100,200,0.1);color:rgba(170,130,220,0.6)}
+.pk-detail{color:rgba(140,180,220,0.35);font-size:10px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pk-color{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.pk-mapping{font-size:10px;color:rgba(140,180,220,0.35);font-family:'Cascadia Code','Consolas',monospace}
+.pk-section{font-size:9px;color:rgba(100,160,200,0.3);letter-spacing:1px;margin:8px 0 4px;padding-top:6px}
 </style>
 </head>
 <body>
 <canvas id="cv"></canvas>
-<div class="watermark">SPIRIT INK v3.0</div>
+<div class="watermark">SPIRIT INK v4.0</div>
 <div class="fps" id="fps"></div>
 
 <div class="toolbar">
+  <button class="tbtn" id="bPks" onclick="toggle('packs')">📦</button>
   <button class="tbtn" id="bDbg" onclick="toggle('dbg')">📋</button>
   <button class="tbtn" id="bCfg" onclick="toggle('cfg')">⚙</button>
 </div>
@@ -85,16 +113,16 @@ hr.dd{border:none;border-top:1px solid rgba(80,140,200,0.04);margin:8px 0}
     </div>
     <label>模型</label>
     <select id="cModel"></select>
-    <label>粒子数量（身体大小）</label>
+    <label>粒子数量</label>
     <input id="cPart" type="number" min="20" max="500" step="10" value="100" />
     <div class="cbtn-row">
       <button class="cbtn pri" onclick="saveCfg()">保存</button>
       <button class="cbtn" onclick="testCfg()">测试</button>
-      <button class="cbtn" onclick="resetMemory()">重置记忆</button>
+      <button class="cbtn" onclick="resetPacks()">重置词典</button>
     </div>
     <div id="cMsg" class="cmsg"></div>
     <div style="margin-top:10px;font-size:9px;color:rgba(100,140,180,0.25)">
-      已学习动作: <span id="memCount">0</span>
+      词典: <span id="dictInfo">-</span> · 映射: <span id="packInfo">-</span>
     </div>
   </div>
 </div>
@@ -104,11 +132,46 @@ hr.dd{border:none;border-top:1px solid rgba(80,140,200,0.04);margin:8px 0}
   <div class="pnl-b" id="dbgBody"></div>
 </div>
 
+<div class="pnl" id="packs">
+  <div class="pnl-h"><span>TOKEN PACKS</span><button onclick="toggle('packs')">✕</button></div>
+  <div class="ptabs">
+    <button class="ptab on" onclick="switchPackTab('dict')">词典包</button>
+    <button class="ptab" onclick="switchPackTab('map')">素材映射包</button>
+  </div>
+  <div class="ptab-content show" id="ptDict"></div>
+  <div class="ptab-content" id="ptMap"></div>
+</div>
+
+<div id="newTokenBanner" onclick="showTokenForm()"></div>
+
+<div id="tokenForm">
+  <h3>ADD NEW TOKEN</h3>
+  <label>Token 名称</label>
+  <input id="tfName" readonly />
+  <label>显示名</label>
+  <input id="tfDisplay" placeholder="如：忧郁" />
+  <label>分类</label>
+  <select id="tfCategory">
+    <option value="emotion">emotion（情感）</option>
+    <option value="shape">shape（形体）</option>
+    <option value="scene">scene（场景）</option>
+  </select>
+  <label>触发提示</label>
+  <input id="tfTrigger" placeholder="如：用户表达忧郁" />
+  <label>映射颜色（R,G,B 0-1）</label>
+  <input id="tfColor" placeholder="0.4,0.4,0.55" />
+  <div class="tf-btns">
+    <button class="cbtn pri" onclick="confirmAddToken()">添加</button>
+    <button class="cbtn" onclick="hideTokenForm()">跳过</button>
+  </div>
+</div>
+
 <div id="inp">
   <div class="irow">
     <input id="msgIn" placeholder="对灵墨说话..." />
     <button class="sbtn" id="sendBtn" onclick="send()">发送</button>
   </div>
+  <div id="tokenTags"></div>
   <div id="status"></div>
 </div>
 
@@ -124,49 +187,527 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-/* ==================== 配置（由 providers.js 提供） ==================== */
-let N = parseInt(localStorage.getItem('si_n') || '100');
+// ═══════════════════════════════════════════════════════
+// DEFAULT DICTIONARY
+// ═══════════════════════════════════════════════════════
 
-/* ==================== 面板 ==================== */
+const DEFAULT_DICTIONARY = {
+  id: "standard-v1",
+  name: "标准情感词典",
+  version: "1.0.0",
+  tokens: {
+    happy:    { display_name:"开心", category:"emotion", trigger_hint:"用户表达开心、高兴、愉快" },
+    sad:      { display_name:"悲伤", category:"emotion", trigger_hint:"用户表达难过、失落、沮丧" },
+    angry:    { display_name:"愤怒", category:"emotion", trigger_hint:"用户表达生气、不满" },
+    fear:     { display_name:"恐惧", category:"emotion", trigger_hint:"用户表达害怕、担心" },
+    calm:     { display_name:"平静", category:"emotion", trigger_hint:"默认状态、安静、放松" },
+    love:     { display_name:"爱意", category:"emotion", trigger_hint:"用户表达喜欢、爱、温暖" },
+    surprise: { display_name:"惊讶", category:"emotion", trigger_hint:"用户表达吃惊、意外" },
+    think:    { display_name:"思考", category:"emotion", trigger_hint:"思考、分析、犹豫" },
+    curious:  { display_name:"好奇", category:"emotion", trigger_hint:"用户表达好奇、疑问" },
+    excited:  { display_name:"兴奋", category:"emotion", trigger_hint:"用户表达激动、期待" },
+    shy:      { display_name:"害羞", category:"emotion", trigger_hint:"用户表达害羞、不好意思" },
+    proud:    { display_name:"自豪", category:"emotion", trigger_hint:"用户表达骄傲、自信" },
+    sphere:   { display_name:"球体", category:"shape", trigger_hint:"聚成球形" },
+    ring:     { display_name:"环形", category:"shape", trigger_hint:"排成环形" },
+    heart:    { display_name:"心形", category:"shape", trigger_hint:"变成心形" },
+    star:     { display_name:"星形", category:"shape", trigger_hint:"变成星形" },
+    wave:     { display_name:"波浪", category:"shape", trigger_hint:"变成波浪形" },
+    line:     { display_name:"线形", category:"shape", trigger_hint:"排成直线" },
+    spiral:   { display_name:"螺旋", category:"shape", trigger_hint:"变成螺旋形" },
+    point:    { display_name:"收缩", category:"shape", trigger_hint:"收缩成点" },
+    greeting:     { display_name:"打招呼", category:"scene", trigger_hint:"用户打招呼", compose:["happy","ring"] },
+    celebration:  { display_name:"庆祝",   category:"scene", trigger_hint:"庆祝、赞美", compose:["excited","star"] },
+    thinking:     { display_name:"沉思",   category:"scene", trigger_hint:"思考问题", compose:["think","sphere"] },
+    affection:    { display_name:"温情",   category:"scene", trigger_hint:"安慰、关心", compose:["love","heart"] },
+    startled:     { display_name:"受惊",   category:"scene", trigger_hint:"惊吓、意外", compose:["surprise","point"] },
+  },
+  ai_rules: "简单回复用 1 个 emotion token。想展示形体加 1 个 shape token。复杂场景用 scene token。你可以自由使用词典中未列出的新 token 名，用户后续可添加。",
+  ai_examples: [
+    { user:"你好",     response:{content:"你好呀！",       tokens:["happy"]} },
+    { user:"变成心形", response:{content:"送你一颗心",     tokens:["love","heart"]} },
+    { user:"我有点难过", response:{content:"抱抱你",       tokens:["sad","sphere"]} },
+    { user:"哇！",     response:{content:"怎么啦！",       tokens:["startled"]} },
+    { user:"变成球",   response:{content:"好的，聚成球～", tokens:["calm","sphere"]} },
+    { user:"我考了第一名", response:{content:"太棒了！恭喜你！", tokens:["celebration"]} },
+  ]
+};
+
+// ═══════════════════════════════════════════════════════
+// DEFAULT ASSET PACK (粒子)
+// ═══════════════════════════════════════════════════════
+
+const DEFAULT_ASSET_PACK = {
+  id: "particle-jarvis-v1",
+  name: "J.A.R.V.I.S 粒子风格",
+  version: "1.0.0",
+  renderer: "particle",
+  config: {
+    particle_count: 100,
+    background: "#08080f",
+    bloom: { strength:0.12, radius:0.4, threshold:0.88 },
+    spring_k: 80,
+    spring_d: 12
+  },
+  default_mapping: {
+    color:[0.4,0.4,0.45], spread:0, speed:0.001, breathe_amp:0.006, breathe_freq:1.0
+  },
+  mappings: {
+    happy:    { color:[0.92,0.78,0.28], spread:0.35,  speed:0.009, breathe_amp:0.014, breathe_freq:1.4 },
+    sad:      { color:[0.28,0.38,0.72], spread:-0.12, speed:0.001, breathe_amp:0.004, breathe_freq:0.6 },
+    angry:    { color:[0.88,0.18,0.12], spread:0.45,  speed:0.018, breathe_amp:0.022, breathe_freq:2.0 },
+    fear:     { color:[0.45,0.25,0.58], spread:-0.35, speed:0.014, breathe_amp:0.003, breathe_freq:1.8 },
+    calm:     { color:[0.28,0.55,0.38], spread:0,     speed:0.001, breathe_amp:0.008, breathe_freq:0.8 },
+    love:     { color:[0.88,0.45,0.58], spread:0.18,  speed:0.003, breathe_amp:0.016, breathe_freq:0.9 },
+    surprise: { color:[0.85,0.85,0.88], spread:0.40,  speed:0.010, breathe_amp:0.020, breathe_freq:2.2 },
+    think:    { color:[0.48,0.32,0.68], spread:-0.18, speed:0.001, breathe_amp:0.005, breathe_freq:0.7 },
+    curious:  { color:[0.35,0.62,0.88], spread:0.12,  speed:0.005, breathe_amp:0.007, breathe_freq:1.0 },
+    excited:  { color:[0.92,0.82,0.35], spread:0.28,  speed:0.007, breathe_amp:0.012, breathe_freq:1.2 },
+    shy:      { color:[0.88,0.55,0.50], spread:-0.15, speed:0.002, breathe_amp:0.006, breathe_freq:0.9 },
+    proud:    { color:[0.88,0.78,0.28], spread:0.22,  speed:0.006, breathe_amp:0.010, breathe_freq:1.1 },
+    sphere: { shape:"sphere",  tightness:0.5, motion_speed:"normal", duration:2500 },
+    ring:   { shape:"ring",    tightness:0.5, motion_speed:"normal", duration:2500 },
+    heart:  { shape:"heart",   tightness:0.5, motion_speed:"slow",   duration:3000 },
+    star:   { shape:"star",    tightness:0.5, motion_speed:"normal", duration:2500 },
+    wave:   { shape:"wave",    tightness:0.5, motion_speed:"normal", duration:2500 },
+    line:   { shape:"line",    tightness:0.5, motion_speed:"normal", duration:2000 },
+    spiral: { shape:"spiral",  tightness:0.5, motion_speed:"normal", duration:2500 },
+    point:  { shape:"point",   tightness:0.5, motion_speed:"fast",   duration:1500 },
+    greeting:    { compose:["happy","ring"],   hold:true,  duration:3000 },
+    celebration: { compose:["excited","star"], hold:true,  duration:3000 },
+    thinking:    { compose:["think","sphere"], hold:true,  duration:4000 },
+    affection:   { compose:["love","heart"],   hold:true,  duration:4000 },
+    startled:    { compose:["surprise","point"], hold:false, duration:2000 },
+  }
+};
+
+// ═══════════════════════════════════════════════════════
+// SPRING + SPRINGPOOL
+// ═══════════════════════════════════════════════════════
+
+class Spring {
+  constructor(k=80, d=12) {
+    this.target=0; this.value=0; this.velocity=0;
+    this.k=k; this.d=d;
+  }
+  setTarget(t) { this.target=t; }
+  update(dt) {
+    const force=(this.target-this.value)*this.k;
+    this.velocity+=(force-this.velocity*this.d)*dt;
+    this.value+=this.velocity*dt;
+  }
+}
+
+class SpringPool {
+  constructor(cfg={}) {
+    const k=cfg.spring_k||80, d=cfg.spring_d||12;
+    this.springs = {
+      color_r:      new Spring(k*0.4,d*0.7),
+      color_g:      new Spring(k*0.4,d*0.7),
+      color_b:      new Spring(k*0.4,d*0.7),
+      spread:       new Spring(k*0.6,d),
+      speed:        new Spring(k*0.5,d),
+      breathe_amp:  new Spring(k*0.5,d),
+      breathe_freq: new Spring(k*0.7,d),
+      bloom_strength: new Spring(k*0.3,d*0.7),
+      bloom_threshold: new Spring(k*0.3,d*0.7),
+    };
+  }
+  applyEmotion(m) {
+    if(!m) return;
+    if(m.color) {
+      this.springs.color_r.setTarget(m.color[0]);
+      this.springs.color_g.setTarget(m.color[1]);
+      this.springs.color_b.setTarget(m.color[2]);
+    }
+    if(m.spread!==undefined) this.springs.spread.setTarget(m.spread);
+    if(m.speed!==undefined) this.springs.speed.setTarget(m.speed);
+    if(m.breathe_amp!==undefined) this.springs.breathe_amp.setTarget(m.breathe_amp);
+    if(m.breathe_freq!==undefined) this.springs.breathe_freq.setTarget(m.breathe_freq);
+    if(m.bloom_strength!==undefined) this.springs.bloom_strength.setTarget(m.bloom_strength);
+    if(m.bloom_threshold!==undefined) this.springs.bloom_threshold.setTarget(m.bloom_threshold);
+  }
+  applyDefault(m) { this.applyEmotion(m); }
+  update(dt) { for(const s of Object.values(this.springs)) s.update(dt); }
+  vals() {
+    const v={};
+    for(const [n,s] of Object.entries(this.springs)) v[n]=s.value;
+    return v;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// SHAPE GENERATORS
+// ═══════════════════════════════════════════════════════
+
+const SHAPES = {
+  sphere(i,n,p) {
+    const phi=Math.acos(1-2*(i+0.5)/n), theta=Math.PI*(1+Math.sqrt(5))*i;
+    const r=0.15+p.tightness*0.55;
+    return [r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta)];
+  },
+  point(i,n,p) {
+    const r=p.tightness*0.08+0.02;
+    return [(Math.random()-.5)*r,(Math.random()-.5)*r,(Math.random()-.5)*r];
+  },
+  ring(i,n,p) {
+    const a=(i/n)*Math.PI*2, r=0.15+p.tightness*0.5;
+    return [Math.cos(a)*r, Math.sin(a)*r, (Math.random()-.5)*0.04];
+  },
+  line(i,n,p) {
+    const t=(i/(n-1||1)-0.5)*1.2*(0.3+p.tightness*0.7);
+    return [t,(Math.random()-.5)*0.02,(Math.random()-.5)*0.02];
+  },
+  wave(i,n,p) {
+    const t=(i/(n-1||1));
+    return [(t-0.5)*1.5, Math.sin(t*Math.PI*3)*0.2*(0.5+p.tightness*0.5), Math.cos(t*Math.PI*3)*0.08];
+  },
+  heart(i,n,p) {
+    const t=(i/n)*Math.PI*2, s=0.04+p.tightness*0.04;
+    const x=16*Math.pow(Math.sin(t),3)/17;
+    const y=(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))/17;
+    return [x*s*1.5, y*s*1.5+0.05, (Math.random()-.5)*0.05*s];
+  },
+  star(i,n,p) {
+    const a=(i/n)*Math.PI*2-Math.PI/2;
+    const seg=(i/n)*10;
+    const r=(Math.floor(seg)%2===0?0.4+p.tightness*0.2:0.15+p.tightness*0.1);
+    const j=(Math.random()-.5)*0.03;
+    return [Math.cos(a)*(r+j), Math.sin(a)*(r+j)+0.05, (Math.random()-.5)*0.04];
+  },
+  spiral(i,n,p) {
+    const t=(i/n)*Math.PI*4, r=(i/n)*(0.1+p.tightness*0.6);
+    return [Math.cos(t)*r, Math.sin(t)*r*0.7, (Math.random()-.5)*0.05];
+  }
+};
+
+// ═══════════════════════════════════════════════════════
+// TOKEN ENGINE
+// ═══════════════════════════════════════════════════════
+
+class TokenEngine {
+  constructor() {
+    this.dictionary = null;
+    this.assetPack = null;
+    this.pendingTokens = [];
+    this.activeTokenNames = [];
+  }
+
+  init() {
+    this.dictionary = this._load('si_dict', DEFAULT_DICTIONARY);
+    this.assetPack = this._load('si_pack', DEFAULT_ASSET_PACK);
+  }
+
+  _load(key, defaults) {
+    try {
+      const raw = localStorage.getItem(key);
+      if(raw) { const p=JSON.parse(raw); if(p.id) return p; }
+    } catch(e) {}
+    return JSON.parse(JSON.stringify(defaults));
+  }
+
+  _saveDict() { localStorage.setItem('si_dict', JSON.stringify(this.dictionary)); }
+  _savePack() { localStorage.setItem('si_pack', JSON.stringify(this.assetPack)); }
+
+  resolve(tokenInputs) {
+    this.pendingTokens = [];
+    const flat = this._flatten(tokenInputs);
+    let emotion = null, shape = null;
+    const resolved = [];
+
+    for(const item of flat) {
+      const name = item.name;
+      const dictDef = this.dictionary.tokens[name];
+      const mapping = this.assetPack.mappings[name];
+      const isUnknown = !dictDef && !mapping;
+
+      if(!dictDef) this.pendingTokens.push({name, type:'unknown'});
+      else if(!mapping) this.pendingTokens.push({name, type:'unmapped'});
+
+      if(mapping) {
+        if(mapping.compose) {
+          const sub = this._resolveCompose(mapping.compose, item);
+          if(sub.emotion) emotion = sub.emotion;
+          if(sub.shape) shape = {...sub.shape, ...this._pickOverride(mapping, item)};
+          resolved.push(name);
+        } else if(mapping.shape) {
+          shape = {...mapping, ...this._pickOverride({}, item)};
+          resolved.push(name);
+        } else if(mapping.color || mapping.spread !== undefined) {
+          emotion = mapping;
+          resolved.push(name);
+        }
+      } else if(isUnknown) {
+        resolved.push(name);
+      }
+    }
+
+    this.activeTokenNames = resolved;
+    return {
+      emotion: emotion || this.assetPack.default_mapping,
+      shape,
+      unknownTokens: this.pendingTokens.filter(p=>p.type==='unknown').map(p=>p.name),
+      unmappedTokens: this.pendingTokens.filter(p=>p.type==='unmapped').map(p=>p.name),
+    };
+  }
+
+  _flatten(inputs) {
+    const result = [];
+    for(const inp of inputs) {
+      if(typeof inp === 'string') result.push({name:inp});
+      else if(inp && inp.name) result.push(inp);
+    }
+    return result;
+  }
+
+  _resolveCompose(names, parentItem) {
+    let emotion=null, shape=null;
+    for(const n of names) {
+      const m = this.assetPack.mappings[n];
+      if(!m) continue;
+      if(m.compose) {
+        const sub = this._resolveCompose(m.compose, parentItem);
+        if(sub.emotion) emotion = sub.emotion;
+        if(sub.shape) shape = sub.shape;
+      } else if(m.shape) {
+        shape = m;
+      } else if(m.color || m.spread !== undefined) {
+        emotion = m;
+      }
+    }
+    return {emotion, shape};
+  }
+
+  _pickOverride(mapping, item) {
+    const o = {};
+    if(item.hold !== undefined) o.hold = item.hold;
+    else if(mapping.hold !== undefined) o.hold = mapping.hold;
+    if(item.duration) o.duration = item.duration;
+    else if(mapping.duration) o.duration = mapping.duration;
+    return o;
+  }
+
+  addToken(name, display_name, category, trigger_hint) {
+    this.dictionary.tokens[name] = {display_name, category, trigger_hint};
+    this._saveDict();
+  }
+
+  addMapping(name, params) {
+    this.assetPack.mappings[name] = params;
+    this._savePack();
+  }
+
+  reset() {
+    this.dictionary = JSON.parse(JSON.stringify(DEFAULT_DICTIONARY));
+    this.assetPack = JSON.parse(JSON.stringify(DEFAULT_ASSET_PACK));
+    this._saveDict();
+    this._savePack();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// PROMPT BUILDER
+// ═══════════════════════════════════════════════════════
+
+class PromptBuilder {
+  build(dict) {
+    const cats = {emotion:[], shape:[], scene:[]};
+    for(const [n,d] of Object.entries(dict.tokens)) {
+      const list = cats[d.category] || cats.emotion;
+      let line = `- "${n}": ${d.display_name}`;
+      if(d.compose) line += ` (= ${d.compose.join('+')})`;
+      list.push(line);
+    }
+    const examples = dict.ai_examples.map(ex =>
+      `用户："${ex.user}"\n你：${JSON.stringify(ex.response)}`
+    ).join('\n\n');
+
+    return `你是灵墨，一个有身体的AI。你的身体通过 Token 控制视觉表达。
+
+每次回复必须是 JSON：
+{"content":"你说的文字","tokens":["token_name"]}
+
+token 可以是字符串或对象：
+- "happy"（默认效果）
+- {"name":"heart","hold":true}
+
+## 可用的情感 Token
+${cats.emotion.join('\n')}
+
+## 可用的形体 Token
+${cats.shape.join('\n')}
+
+## 可用的场景 Token（自动组合多个 token）
+${cats.scene.join('\n')}
+
+## 使用规则
+${dict.ai_rules}
+
+## 示例
+${examples}
+
+记住：永远只返回一个 JSON 对象，不要任何其他文字。你可以自由使用上面没列出的新 token 名。`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// APP INIT
+// ═══════════════════════════════════════════════════════
+
+const engine = new TokenEngine();
+engine.init();
+const promptBuilder = new PromptBuilder();
+const springPool = new SpringPool(engine.assetPack.config);
+
+let N = engine.assetPack.config.particle_count || 100;
+localStorage.setItem('si_n', N);
+let isThinking = false;
+
+// ═══ UI ═══
 window.toggle = function(id) {
   const el = document.getElementById(id);
   const open = el.classList.contains('show');
-  document.getElementById('cfg').classList.remove('show');
-  document.getElementById('dbg').classList.remove('show');
-  document.getElementById('bCfg').classList.remove('hide','on');
-  document.getElementById('bDbg').classList.remove('hide','on');
-  if (!open) {
+  ['cfg','dbg','packs'].forEach(p => document.getElementById(p).classList.remove('show'));
+  ['bCfg','bDbg','bPks'].forEach(b => { const e=document.getElementById(b); e.classList.remove('hide','on'); });
+  if(!open) {
     el.classList.add('show');
-    if (id==='cfg') {
+    if(id==='cfg') {
       document.getElementById('bCfg').classList.add('hide');
       document.getElementById('cPart').value = N;
-      updateMemCount();
-    } else {
+      updatePackInfo();
+    } else if(id==='dbg') {
       document.getElementById('bDbg').classList.add('hide');
+    } else if(id==='packs') {
+      document.getElementById('bPks').classList.add('hide');
+      renderPackViewer();
     }
   }
 };
-window.saveCfg = function() {
-  const cfg = SIProviders.save(() => Math.max(20, Math.min(500, parseInt(document.getElementById('cPart').value)||100)));
-  N = cfg.N;
-  localStorage.setItem('si_n', N);
-  rebuildBody(N);
-};
-window.testCfg = function() { SIProviders.test(); };
-window.resetMemory = function() {
-  if(confirm('确定清除所有已学习的动作记忆？')) {
-    actionMemory = {instincts:[...defaultInstincts], learned:[], compositions:[]};
-    saveMemory(); updateMemCount();
+
+window.switchPackTab = function(tab) {
+  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('on'));
+  document.getElementById('ptDict').classList.remove('show');
+  document.getElementById('ptMap').classList.remove('show');
+  if(tab==='dict') {
+    document.querySelector('.ptab:first-child').classList.add('on');
+    document.getElementById('ptDict').classList.add('show');
+  } else {
+    document.querySelector('.ptab:last-child').classList.add('on');
+    document.getElementById('ptMap').classList.add('show');
   }
 };
-function updateMemCount() {
-  document.getElementById('memCount').textContent = actionMemory.learned.length;
+
+function renderPackViewer() {
+  const d = engine.dictionary;
+  const p = engine.assetPack;
+
+  // Dictionary tab
+  const cats = {emotion:[], shape:[], scene:[]};
+  for(const [n,def] of Object.entries(d.tokens)) {
+    (cats[def.category] || cats.emotion).push({name:n, ...def});
+  }
+  let dictHtml = `<div class="pk-hdr"><b>${d.name}</b> v${d.version} · ${Object.keys(d.tokens).length} tokens</div>`;
+  for(const [cat, items] of Object.entries(cats)) {
+    if(!items.length) continue;
+    dictHtml += `<div class="pk-section">${cat.toUpperCase()} (${items.length})</div>`;
+    for(const item of items) {
+      const compose = item.compose ? ` = ${item.compose.join('+')}` : '';
+      dictHtml += `<div class="pk-item">
+        <span class="pk-name">${item.name}</span>
+        <span class="pk-cat ${cat}">${cat}</span>
+        <span class="pk-detail">${item.display_name}${compose ? compose : ''} · ${item.trigger_hint||''}</span>
+      </div>`;
+    }
+  }
+  document.getElementById('ptDict').innerHTML = dictHtml;
+
+  // Mapping tab
+  const emotionMappings = [], shapeMappings = [], sceneMappings = [], otherMappings = [];
+  for(const [n,m] of Object.entries(p.mappings)) {
+    if(m.compose) sceneMappings.push({name:n,...m});
+    else if(m.shape) shapeMappings.push({name:n,...m});
+    else if(m.color || m.spread !== undefined) emotionMappings.push({name:n,...m});
+    else otherMappings.push({name:n,...m});
+  }
+
+  let mapHtml = `<div class="pk-hdr"><b>${p.name}</b> v${p.version} · renderer: ${p.renderer} · ${Object.keys(p.mappings).length} mappings</div>`;
+  mapHtml += `<div class="pk-section">DEFAULT MAPPING</div>`;
+  const dm = p.default_mapping;
+  if(dm && dm.color) {
+    mapHtml += `<div class="pk-item">
+      <span class="pk-color" style="background:rgb(${Math.round(dm.color[0]*255)},${Math.round(dm.color[1]*255)},${Math.round(dm.color[2]*255)})"></span>
+      <span class="pk-mapping">color:[${dm.color.map(c=>c.toFixed(2)).join(', ')}] spread:${dm.spread} breathe:${dm.breathe_amp}/${dm.breathe_freq}</span>
+    </div>`;
+  }
+
+  if(emotionMappings.length) {
+    mapHtml += `<div class="pk-section">EMOTION (${emotionMappings.length})</div>`;
+    for(const m of emotionMappings) {
+      const c = m.color || [0.4,0.4,0.45];
+      mapHtml += `<div class="pk-item">
+        <span class="pk-color" style="background:rgb(${Math.round(c[0]*255)},${Math.round(c[1]*255)},${Math.round(c[2]*255)})"></span>
+        <span class="pk-name">${m.name}</span>
+        <span class="pk-mapping">spread:${(m.spread||0).toFixed(2)} spd:${(m.speed||0).toFixed(3)} breath:${(m.breathe_amp||0).toFixed(3)}/${m.breathe_freq||1}</span>
+      </div>`;
+    }
+  }
+  if(shapeMappings.length) {
+    mapHtml += `<div class="pk-section">SHAPE (${shapeMappings.length})</div>`;
+    for(const m of shapeMappings) {
+      mapHtml += `<div class="pk-item">
+        <span class="pk-name">${m.name}</span>
+        <span class="pk-mapping">${m.shape} tight:${m.tightness} ${m.motion_speed} ${m.duration}ms${m.hold?' HOLD':''}</span>
+      </div>`;
+    }
+  }
+  if(sceneMappings.length) {
+    mapHtml += `<div class="pk-section">SCENE (${sceneMappings.length})</div>`;
+    for(const m of sceneMappings) {
+      mapHtml += `<div class="pk-item">
+        <span class="pk-name">${m.name}</span>
+        <span class="pk-mapping">${m.compose.join(' + ')} ${m.duration}ms${m.hold?' HOLD':''}</span>
+      </div>`;
+    }
+  }
+  document.getElementById('ptMap').innerHTML = mapHtml;
 }
 
-// 初始化提供商UI（在模块加载后调用）
+window.saveCfg = function() {
+  const cfg = SIProviders.save(() => {
+    N = Math.max(20, Math.min(500, parseInt(document.getElementById('cPart').value)||100));
+    return N;
+  });
+  N = cfg.N;
+  engine.assetPack.config.particle_count = N;
+  engine._savePack();
+  localStorage.setItem('si_n', N);
+  rebuildBody(N);
+  updatePackInfo();
+};
+
+window.testCfg = function() { SIProviders.test(); };
+
+window.resetPacks = function() {
+  if(confirm('确定重置词典和素材包到默认状态？')) {
+    engine.reset();
+    N = engine.assetPack.config.particle_count || 100;
+    localStorage.setItem('si_n', N);
+    document.getElementById('cPart').value = N;
+    rebuildBody(N);
+    springPool.applyDefault(engine.assetPack.default_mapping);
+    updatePackInfo();
+    log('action','词典和素材包已重置');
+  }
+};
+
+function updatePackInfo() {
+  document.getElementById('dictInfo').textContent = `${engine.dictionary.name} (${Object.keys(engine.dictionary.tokens).length} tokens)`;
+  document.getElementById('packInfo').textContent = `${engine.assetPack.name} (${Object.keys(engine.assetPack.mappings).length} mappings)`;
+}
+
 SIProviders.init();
 
-/* ==================== 调试日志 ==================== */
+// ═══ DEBUG ═══
 const $d = document.getElementById('dbgBody');
 function log(type, text) {
   const cls = {div:'hr.dd',label:'dl',meta:'dm',json:'dj',err:'de',reply:'dr',action:'da'}[type]||'';
@@ -176,54 +717,64 @@ function log(type, text) {
 }
 function setStatus(t,cls){const e=document.getElementById('status');e.textContent=t;e.className=cls||''}
 
-/* ==================== 动作记忆系统 ==================== */
-const defaultInstincts = [
-  {name:'breathe',always:true,action:{type:'wave',axis:'y',amplitude:0.008,frequency:1.2}},
-  {name:'drift',always:true,action:{type:'random-walk',speed:0.0002}},
-  {name:'repel',always:true,action:{type:'repel',force:0.00008,range:0.06}}
-];
+// ═══ NEW TOKEN UI ═══
+let pendingNewTokens = [];
 
-let actionMemory = loadMemory();
+function showNewTokenBanner(tokens) {
+  if(!tokens.length) return;
+  pendingNewTokens = tokens;
+  const banner = document.getElementById('newTokenBanner');
+  banner.innerHTML = `检测到新 token: <span class="ntb-name">${tokens.join(', ')}</span> — 点击添加到词典`;
+  banner.style.display = 'block';
+}
 
-function loadMemory() {
-  try {
-    const raw = localStorage.getItem('si_memory');
-    if(raw) {
-      const m = JSON.parse(raw);
-      m.instincts = m.instincts || defaultInstincts;
-      m.learned = m.learned || [];
-      m.compositions = m.compositions || [];
-      return m;
+window.showTokenForm = function() {
+  if(!pendingNewTokens.length) return;
+  const name = pendingNewTokens[0];
+  document.getElementById('tfName').value = name;
+  document.getElementById('tfDisplay').value = '';
+  document.getElementById('tfCategory').value = 'emotion';
+  document.getElementById('tfTrigger').value = '';
+  document.getElementById('tfColor').value = '';
+  document.getElementById('tokenForm').style.display = 'block';
+  document.getElementById('newTokenBanner').style.display = 'none';
+  document.getElementById('tfDisplay').focus();
+};
+
+window.hideTokenForm = function() {
+  document.getElementById('tokenForm').style.display = 'none';
+  pendingNewTokens.shift();
+  if(pendingNewTokens.length) showNewTokenBanner(pendingNewTokens);
+};
+
+window.confirmAddToken = function() {
+  const name = document.getElementById('tfName').value.trim();
+  const display = document.getElementById('tfDisplay').value.trim() || name;
+  const category = document.getElementById('tfCategory').value;
+  const trigger = document.getElementById('tfTrigger').value.trim() || '';
+  engine.addToken(name, display, category, trigger);
+
+  const colorStr = document.getElementById('tfColor').value.trim();
+  if(colorStr) {
+    const parts = colorStr.split(',').map(Number);
+    if(parts.length===3 && parts.every(n=>!isNaN(n))) {
+      engine.addMapping(name, {color:parts, spread:0, speed:0.001, breathe_amp:0.006, breathe_freq:1.0});
     }
-  } catch(e) {}
-  return {instincts:[...defaultInstincts], learned:[], compositions:[]};
-}
-
-function saveMemory() {
-  localStorage.setItem('si_memory', JSON.stringify(actionMemory));
-  updateMemCount();
-}
-
-function findLearned(name) {
-  return actionMemory.learned.find(a => a.name === name);
-}
-
-function learnAction(def) {
-  const idx = actionMemory.learned.findIndex(a => a.name === def.name);
-  if(idx >= 0) {
-    actionMemory.learned[idx] = {...actionMemory.learned[idx], ...def, count: (actionMemory.learned[idx].count||0)+1, updated: Date.now()};
   } else {
-    actionMemory.learned.push({...def, count: 1, created: Date.now()});
+    const def = engine.assetPack.default_mapping;
+    engine.addMapping(name, {...def});
   }
-  saveMemory();
-  log('action','💾 学习新动作: ' + def.name + (def.trigger ? ' (触发: '+def.trigger+')' : ''));
-}
+  log('action','添加新 token: ' + name + ' (' + category + ')');
+  hideTokenForm();
+  updatePackInfo();
+};
 
-/* ==================== 粒子物理引擎 ==================== */
-// 每个粒子的状态
-let particles = []; // [{x,y,z,vx,vy,vz,tx,ty,tz,cr,cg,cb,tr,tg,tb}]
+// ═══════════════════════════════════════════════════════
+// PARTICLE SYSTEM
+// ═══════════════════════════════════════════════════════
+
+let particles = [];
 let geo, mesh;
-let isThinking = false;
 
 function createParticle(i) {
   const angle = (i / N) * Math.PI * 2;
@@ -235,11 +786,9 @@ function createParticle(i) {
     vx: (Math.random()-0.5)*0.001,
     vy: (Math.random()-0.5)*0.001,
     vz: (Math.random()-0.5)*0.0005,
-    tx: 0, ty: 0, tz: 0, // target from actions
+    tx: 0, ty: 0, tz: 0,
     hasTarget: false,
-    cr: 0.25+Math.random()*0.05, cg: 0.25+Math.random()*0.05, cb: 0.3+Math.random()*0.05,
-    tr: 0.28, tg: 0.28, tb: 0.32,
-    phase: Math.random() * Math.PI * 2 // for breath phase offset
+    phase: Math.random() * Math.PI * 2
   };
 }
 
@@ -248,7 +797,6 @@ function rebuildBody(n) {
   N = n;
   particles = [];
   for(let i=0; i<N; i++) particles.push(createParticle(i));
-
   const pos = new Float32Array(N*3);
   const col = new Float32Array(N*3);
   geo = new THREE.BufferGeometry();
@@ -275,508 +823,123 @@ function rebuildBody(n) {
   scene.add(mesh);
 }
 
-/* ==================== 神经系统 ==================== */
-// 当前活跃的情绪层
-let emotionLayer = null; // {emotion, intensity, targetColor, speed, spread, ...}
-
-// 当前活跃的动作队列
+// ═══ ACTION QUEUE ═══
 let actionQueue = [];
 let currentAction = null;
 let actionProgress = 0;
-
-function processBodyCommand(body) {
-  if(!body) return;
-  
-  // _learn: 学习新动作
-  if(body._learn) {
-    learnAction(body._learn);
-  }
-  
-  // feel: 情绪层
-  if(body.feel) {
-    emotionLayer = applyEmotion(body.feel);
-    log('action', '🎭 情绪: ' + (emotionLayer.emotion||'unknown') + ' ×' + (emotionLayer.intensity||0.5).toFixed(2));
-  }
-  
-  // move: 整体姿态
-  if(body.move) {
-    const act = applyMove(body.move);
-    queueAction(act);
-    log('action', '📍 姿态: move→' + body.move.target);
-  }
-  
-  // pose: 局部姿态
-  if(body.pose) {
-    const act = applyPose(body.pose);
-    queueAction(act);
-    log('action', '🦴 局部: ' + Object.keys(body.pose).join(', '));
-  }
-  
-  // detail: 精细控制
-  if(body.detail) {
-    const act = applyDetail(body.detail);
-    queueAction(act);
-    log('action', '🎯 精细: ' + (body.detail.particles?.length||0) + '个粒子');
-  }
-  
-  // action: 调用已学动作
-  if(body.action) {
-    const learned = findLearned(body.action);
-    if(learned) {
-      log('action', '📦 调用已学动作: ' + body.action);
-      processBodyCommand(learned.action);
-    } else {
-      log('action', '⚠ 未找到已学动作: ' + body.action);
-    }
-  }
-  
-  // sequence: 动作序列（每个元素可以是完整指令对象）
-  if(body.sequence && Array.isArray(body.sequence)) {
-    for(const step of body.sequence) {
-      // Each step can be {feel:...}, {move:...}, {pose:...}, {_learn:...} etc
-      const act = wrapStepAsAction(step);
-      if(act) queueAction(act);
-    }
-    log('action', '🎬 序列: ' + body.sequence.length + ' 步');
-  }
-  
-  // points: 精确点控制
-  if(body.points && Array.isArray(body.points)) {
-    queueAction(applyPoints(body.points, body.duration||3000, body.hold));
-    log('action', '✏️ 极致控制: ' + body.points.length + ' 个关键点');
-  }
-}
-
-// Wrap a sequence step into an action object
-function wrapStepAsAction(step) {
-  if(!step || typeof step !== 'object') return null;
-  
-  // If it's a feel, move, pose etc - wrap it as an action that executes processBodyCommand
-  const duration = step.duration || 2000;
-  const name = step.feel ? 'feel-'+step.feel.emotion
-    : step.move ? 'move-'+step.move.target
-    : step.pose ? 'pose'
-    : step.points ? 'points'
-    : 'sequence-step';
-  
-  return {
-    name,
-    duration,
-    speed: step.speed || 0.02,
-    _bodyStep: step, // flag: this action will process body commands when activated
-    targets: []
-  };
-}
-
-/* --- 情绪映射 --- */
-function applyEmotion(feel) {
-  const intensity = Math.max(0, Math.min(1, feel.intensity ?? 0.5));
-  const e = (feel.emotion || 'calm').toLowerCase();
-  const map = {
-    joy:     {cr:0.92,cg:0.78,cb:0.28, spread:0.35*intensity, speed:0.009*intensity, breatheAmp:0.014*intensity, breatheFreq:1.4},
-    happy:   {cr:0.92,cg:0.82,cb:0.35, spread:0.28*intensity, speed:0.007*intensity, breatheAmp:0.012*intensity, breatheFreq:1.2},
-    love:    {cr:0.88,cg:0.45,cb:0.58, spread:0.18*intensity, speed:0.003*intensity, breatheAmp:0.016*intensity, breatheFreq:0.9}, // heartbeat
-    sad:     {cr:0.28,cg:0.38,cb:0.72, spread:-0.12*intensity, speed:0.001, breatheAmp:0.004, breatheFreq:0.6},
-    angry:   {cr:0.88,cg:0.18,cb:0.12, spread:0.45*intensity, speed:0.018*intensity, breatheAmp:0.022*intensity, breatheFreq:2.0, jitter:0.012*intensity},
-    fear:    {cr:0.45,cg:0.25,cb:0.58, spread:-0.35*intensity, speed:0.014*intensity, breatheAmp:0.003, breatheFreq:1.8, jitter:0.006*intensity},
-    curious: {cr:0.35,cg:0.62,cb:0.88, spread:0.12*intensity, speed:0.005*intensity, breatheAmp:0.007, breatheFreq:1.0},
-    calm:    {cr:0.28,cg:0.55,cb:0.38, spread:0, speed:0.001, breatheAmp:0.008, breatheFreq:0.8},
-    think:   {cr:0.48,cg:0.32,cb:0.68, spread:-0.18*intensity, speed:0.001, breatheAmp:0.005, breatheFreq:0.7},
-    warm:    {cr:0.88,cg:0.58,cb:0.28, spread:0.12*intensity, speed:0.002, breatheAmp:0.01, breatheFreq:0.9},
-    intense: {cr:0.82,cg:0.28,cb:0.45, spread:0.22*intensity, speed:0.012*intensity, breatheAmp:0.02*intensity, breatheFreq:1.6},
-    surprise:{cr:0.85,cg:0.85,cb:0.88, spread:0.4*intensity, speed:0.01*intensity, breatheAmp:0.02*intensity, breatheFreq:2.2},
-  };
-  const preset = map[e] || map.calm;
-  return {emotion:e, intensity, ...preset};
-}
-
-/* --- 意图：整体姿态 --- */
-function applyMove(move) {
-  const speed = ({slow:0.006,normal:0.018,fast:0.045}[move.speed]) || 0.018;
-  const tightness = Math.max(0, Math.min(1, move.tightness ?? 0.5));
-  const duration = move.duration || 2500;
-  const targets = [];
-  
-  const shapes = {
-    sphere: (i,n) => {
-      const phi=Math.acos(1-2*(i+0.5)/n), theta=Math.PI*(1+Math.sqrt(5))*i; // fibonacci sphere
-      const r=0.15+tightness*0.55;
-      return [r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta)];
-    },
-    point: (i,n) => {
-      const r=tightness*0.08+0.02;
-      return [(Math.random()-.5)*r, (Math.random()-.5)*r, (Math.random()-.5)*r];
-    },
-    ring: (i,n) => {
-      const a=(i/n)*Math.PI*2, r=0.15+tightness*0.5;
-      return [Math.cos(a)*r, Math.sin(a)*r, (Math.random()-.5)*0.04];
-    },
-    line: (i,n) => {
-      const t=(i/(n-1||1)-0.5)*1.2*(0.3+tightness*0.7);
-      return [t, (Math.random()-.5)*0.02, (Math.random()-.5)*0.02];
-    },
-    wave: (i,n) => {
-      const t=(i/(n-1||1));
-      return [(t-0.5)*1.5, Math.sin(t*Math.PI*3)*0.2*(0.5+tightness*0.5), Math.cos(t*Math.PI*3)*0.08];
-    },
-    heart: (i,n) => {
-      const t=(i/n)*Math.PI*2;
-      const s=0.04+tightness*0.04;
-      const x=16*Math.pow(Math.sin(t),3)/17;
-      const y=(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))/17;
-      return [x*s*1.5, y*s*1.5+0.05, (Math.random()-.5)*0.05*s];
-    },
-    star: (i,n) => {
-      const a=(i/n)*Math.PI*2-Math.PI/2;
-      const points=5;
-      const seg=(i/n)*points*2;
-      const r=(Math.floor(seg)%2===0?0.4+tightness*0.2:0.15+tightness*0.1);
-      const jitter=(Math.random()-.5)*0.03;
-      return [Math.cos(a)*(r+jitter), Math.sin(a)*(r+jitter)+0.05, (Math.random()-.5)*0.04];
-    },
-    spiral: (i,n) => {
-      const t=(i/n)*Math.PI*4;
-      const r=(i/n)*(0.1+tightness*0.6);
-      return [Math.cos(t)*r, Math.sin(t)*r*0.7, (Math.random()-.5)*0.05];
-    }
-  };
-  
-  const shapeName = move.target || 'sphere';
-  const fn = shapes[shapeName];
-  const shouldHold = move.hold === true;
-  if(fn) {
-    for(let i=0; i<N; i++) {
-      const [tx,ty,tz] = fn(i,N);
-      targets.push({index:i, tx, ty, tz});
-    }
-  } else {
-    log('action', '⚠ 未知形状: '+shapeName+'，使用sphere');
-    for(let i=0; i<N; i++) {
-      const [tx,ty,tz] = shapes.sphere(i,N);
-      targets.push({index:i, tx, ty, tz});
-    }
-  }
-  
-  return {targets, duration, speed, name:'move-'+shapeName, hold: shouldHold};
-}
-
-/* --- 姿态：局部控制 --- */
-function applyPose(pose) {
-  const duration = 1500;
-  const targets = [];
-  let shouldHold = false;
-  
-  for(const [selector, config] of Object.entries(pose)) {
-    if(config.hold) shouldHold = true;
-    const indices = resolveSelector(selector);
-    const pt = config.points ? applyPointsForIndices(config.points, indices) : poseToTargets(config, indices);
-    targets.push(...pt);
-  }
-  
-  return {targets, duration, speed:0.02, name:'pose', hold: shouldHold};
-}
-
-function resolveSelector(sel) {
-  const indices = [];
-  // "top-30%", "bottom-40%", "left-half", "center-20", "particles":[1,2,3]
-  if(sel.startsWith('top-')) {
-    const pct = parseInt(sel.split('-')[1])/100;
-    const count = Math.floor(N * pct);
-    // top = highest y values
-    return Array.from({length:N},(_,i)=>i).sort((a,b)=>particles[b].y-particles[a].y).slice(0,count);
-  }
-  if(sel.startsWith('bottom-')) {
-    const pct = parseInt(sel.split('-')[1])/100;
-    const count = Math.floor(N * pct);
-    return Array.from({length:N},(_,i)=>i).sort((a,b)=>particles[a].y-particles[b].y).slice(0,count);
-  }
-  if(sel === 'left-half') return Array.from({length:N},(_,i)=>i).sort((a,b)=>particles[a].x-particles[b].x).slice(0,Math.floor(N/2));
-  if(sel === 'right-half') return Array.from({length:N},(_,i)=>i).sort((a,b)=>particles[b].x-particles[a].x).slice(0,Math.floor(N/2));
-  if(sel === 'all') return Array.from({length:N},(_,i)=>i);
-  if(sel.startsWith('center-')) {
-    const count = parseInt(sel.split('-')[1]);
-    return Array.from({length:N},(_,i)=>i).sort((a,b)=>{
-      const da=particles[a].x**2+particles[a].y**2;
-      const db=particles[b].x**2+particles[b].y**2;
-      return da-db;
-    }).slice(0,count);
-  }
-  return indices;
-}
-
-function poseToTargets(config, indices) {
-  const targets = [];
-  const action = config.action || 'idle';
-  
-  for(const idx of indices) {
-    const p = particles[idx];
-    let tx=p.x, ty=p.y, tz=p.z;
-    
-    if(action.includes('lean-left'))  tx -= 0.18;
-    if(action.includes('lean-right')) tx += 0.18;
-    if(action.includes('lean-up'))    ty += 0.18;
-    if(action.includes('lean-down'))  ty -= 0.18;
-    if(action.includes('spread')) {
-      const d = Math.sqrt(p.x*p.x+p.y*p.y) || 0.01;
-      const r = config.radius || 0.3;
-      tx = (p.x/d)*(d+r*0.35);
-      ty = (p.y/d)*(d+r*0.35);
-    }
-    if(action.includes('contract')) {
-      const d = Math.sqrt(p.x*p.x+p.y*p.y) || 0.01;
-      const factor = config.factor || 0.4;
-      tx *= factor; ty *= factor;
-    }
-    if(action.includes('spin')) {
-      const angle = (config.angle || 45) * Math.PI/180;
-      const nx = p.x*Math.cos(angle) - p.y*Math.sin(angle);
-      const ny = p.x*Math.sin(angle) + p.y*Math.cos(angle);
-      tx = nx; ty = ny;
-    }
-    if(action.includes('rise')) {
-      ty += 0.2;
-    }
-    if(action.includes('sink')) {
-      ty -= 0.2;
-    }
-    
-    targets.push({index:idx, tx, ty, tz});
-  }
-  return targets;
-}
-
-/* --- 精细：精确控制 --- */
-function applyDetail(detail) {
-  const duration = detail.duration || 2000;
-  const indices = detail.particles || [];
-  const targets = [];
-  
-  if(detail.form && detail.form.shape === 'arc') {
-    const c = detail.form.center || [0,0];
-    const r = detail.form.radius || 0.1;
-    for(let i=0; i<indices.length; i++) {
-      const a = (i / (indices.length-1||1)) * Math.PI;
-      targets.push({
-        index: indices[i],
-        tx: c[0] + Math.cos(a)*r,
-        ty: c[1] + Math.sin(a)*r,
-        tz: particles[indices[i]]?.z || 0
-      });
-    }
-  } else if(detail.form && detail.form.shape === 'line') {
-    const from = detail.form.from || [0,0];
-    const to = detail.form.to || [0,0.2];
-    for(let i=0; i<indices.length; i++) {
-      const t = i / (indices.length-1||1);
-      targets.push({
-        index: indices[i],
-        tx: from[0]*(1-t) + to[0]*t,
-        ty: from[1]*(1-t) + to[1]*t,
-        tz: particles[indices[i]]?.z || 0
-      });
-    }
-  } else if(detail.form && detail.form.shape === 'circle') {
-    const c = detail.form.center || [0,0];
-    const r = detail.form.radius || 0.1;
-    for(let i=0; i<indices.length; i++) {
-      const a = (i / indices.length) * Math.PI * 2;
-      targets.push({
-        index: indices[i],
-        tx: c[0] + Math.cos(a)*r,
-        ty: c[1] + Math.sin(a)*r,
-        tz: particles[indices[i]]?.z || 0
-      });
-    }
-  } else if(detail.form && detail.form.shape === 'cluster') {
-    // cluster particles around a point
-    const c = detail.form.center || [0,0];
-    const r = detail.form.radius || 0.05;
-    for(const idx of indices) {
-      targets.push({
-        index: idx,
-        tx: c[0] + (Math.random()-.5)*r*2,
-        ty: c[1] + (Math.random()-.5)*r*2,
-        tz: particles[idx]?.z || 0
-      });
-    }
-  }
-  
-  return {targets, duration, speed:0.02, name:'detail'};
-}
-
-/* --- 精确点控制（极致模式） --- */
-function applyPoints(points, duration, shouldHold) {
-  const targets = [];
-  const len = points.length;
-  for(let i=0; i<N; i++) {
-    // map N particles to len points
-    const fi = (i/N) * len;
-    const i0 = Math.floor(fi) % len;
-    const i1 = (i0+1) % len;
-    const t = fi - Math.floor(fi);
-    const p0 = points[i0], p1 = points[i1];
-    targets.push({
-      index: i,
-      tx: (p0.x||0)*(1-t) + (p1.x||0)*t + (Math.random()-.5)*0.015,
-      ty: (p0.y||0)*(1-t) + (p1.y||0)*t + (Math.random()-.5)*0.015,
-      tz: (p0.z||0)*(1-t) + (p1.z||0)*t + (Math.random()-.5)*0.008,
-      cr: hexR(p0.color||p1.color||'#505060'),
-      cg: hexG(p0.color||p1.color||'#505060'),
-      cb: hexB(p0.color||p1.color||'#505060')
-    });
-  }
-  return {targets, duration, speed:0.025, name:'points', hold: !!shouldHold};
-}
-
-function applyPointsForIndices(points, indices) {
-  // direct point mapping for specific indices
-  const targets = [];
-  for(let i=0; i<indices.length && i<points.length; i++) {
-    targets.push({
-      index: indices[i],
-      tx: points[i].x||0, ty: points[i].y||0, tz: points[i].z||0,
-      cr: hexR(points[i].color||'#505060'),
-      cg: hexG(points[i].color||'#505060'),
-      cb: hexB(points[i].color||'#505060')
-    });
-  }
-  return targets;
-}
-
-/* --- 队列管理 --- */
-function queueAction(action) {
-  action.startTime = null;
-  actionQueue.push(action);
-}
-
-/* ==================== 物理更新 ==================== */
-// 当前持续维持的动作（hold模式）
 let heldAction = null;
 
+function queueShapeAction(shapeMapping) {
+  const shapeName = shapeMapping.shape;
+  const fn = SHAPES[shapeName];
+  if(!fn) { log('action','⚠ 未知形状: '+shapeName); return; }
+
+  const tightness = Math.max(0, Math.min(1, shapeMapping.tightness ?? 0.5));
+  const speedMap = {slow:0.006, normal:0.018, fast:0.045};
+  const speed = speedMap[shapeMapping.motion_speed] || 0.018;
+  const duration = shapeMapping.duration || 2500;
+  const hold = shapeMapping.hold || false;
+  const targets = [];
+
+  for(let i=0; i<N; i++) {
+    const [tx,ty,tz] = fn(i, N, {tightness});
+    targets.push({index:i, tx, ty, tz});
+  }
+  actionQueue.push({targets, duration, speed, name:'shape-'+shapeName, hold, startTime:null});
+}
+
+// ═══════════════════════════════════════════════════════
+// PHYSICS
+// ═══════════════════════════════════════════════════════
+
 function updatePhysics(dt, time) {
-  // Process action queue
   if(!currentAction && actionQueue.length > 0) {
     currentAction = actionQueue.shift();
     currentAction.startTime = time;
     actionProgress = 0;
-    log('action', '▶ ' + (currentAction.name||'action') + ' (' + currentAction.duration + 'ms)' + (currentAction.hold ? ' [HOLD]' : ''));
-    // New action cancels any held state
     heldAction = null;
     for(let i=0; i<N; i++) particles[i].hasTarget = false;
-    if(currentAction._bodyStep) {
-      processBodyCommand(currentAction._bodyStep);
-    }
-    // Apply targets
+    log('action', '▶ ' + (currentAction.name||'action') + ' (' + currentAction.duration + 'ms)' + (currentAction.hold?' [HOLD]':''));
     if(currentAction.targets) {
       for(const t of currentAction.targets) {
-        if(t.index >= 0 && t.index < N) {
-          const p = particles[t.index];
-          p.tx = t.tx; p.ty = t.ty; p.tz = t.tz;
-          p.hasTarget = true;
-          if(t.cr !== undefined) { p.tr = t.cr; p.tg = t.cg; p.tb = t.cb; }
+        if(t.index>=0 && t.index<N) {
+          const p=particles[t.index];
+          p.tx=t.tx; p.ty=t.ty; p.tz=t.tz;
+          p.hasTarget=true;
         }
       }
     }
   }
-  
-  // Update current action progress
+
   if(currentAction) {
     actionProgress = Math.min(1, (time - currentAction.startTime) / (currentAction.duration/1000));
     if(actionProgress >= 1) {
       if(currentAction.hold) {
-        // Hold mode: keep targets, don't release
         log('action', '⊗ ' + (currentAction.name||'action') + ' 维持中');
         heldAction = currentAction;
       } else {
-        // Release targets, drift back to base
         for(let i=0; i<N; i++) particles[i].hasTarget = false;
         log('action', '■ ' + (currentAction.name||'action') + ' 完成');
       }
       currentAction = null;
     }
   }
-  
-  // Emotion fade (smoothly approach target emotion)
-  const eTarget = emotionLayer || {cr:0.28,cg:0.28,cb:0.32,spread:0,speed:0.001,breatheAmp:0.008};
-  
+
+  const sv = springPool.vals();
+  const cr=sv.color_r, cg=sv.color_g, cb=sv.color_b;
+  const spread=sv.spread, breatheAmp=sv.breathe_amp, breatheFreq=sv.breathe_freq;
+
   for(let i=0; i<N; i++) {
     const p = particles[i];
-    
-    // === 基准行为 ===
-    
-    // 呼吸（非常微弱，不干扰形状）
-    const breathAmp = (eTarget.breatheAmp || 0.008) * 0.15;
-    const breathFreq = eTarget.breatheFreq || 1.2;
-    p.y += Math.sin(time * breathFreq + p.phase) * breathAmp * 0.02;
-    
-    // 漂移（已禁用，粒子安静待在位置上）
-    
-    // 粒子间排斥（只检查附近几个，性能优化）
+
+    // breathing
+    p.y += Math.sin(time * breatheFreq + p.phase) * breatheAmp * 0.15 * 0.02;
+
+    // repulsion
     for(let j=i+1; j<N && j<i+8; j++) {
-      const q = particles[j];
+      const q=particles[j];
       const dx=p.x-q.x, dy=p.y-q.y, dz=p.z-q.z;
-      const dist = Math.sqrt(dx*dx+dy*dy+dz*dz) || 0.001;
-      const minDist = 0.06;
-      if(dist < minDist) {
-        const f = (minDist - dist) / dist * 0.00005;
-        p.vx += dx*f; p.vy += dy*f; p.vz += dz*f;
-        q.vx -= dx*f; q.vy -= dy*f; q.vz -= dz*f;
+      const dist=Math.sqrt(dx*dx+dy*dy+dz*dz)||0.001;
+      if(dist<0.06) {
+        const f=(0.06-dist)/dist*0.00005;
+        p.vx+=dx*f; p.vy+=dy*f; p.vz+=dz*f;
+        q.vx-=dx*f; q.vy-=dy*f; q.vz-=dz*f;
       }
     }
-    
-    // 情绪影响 - 扩散/收缩
-    if(Math.abs(eTarget.spread) > 0.001) {
-      const d = Math.sqrt(p.x*p.x + p.y*p.y) || 0.01;
-      p.vx += (p.x/d) * eTarget.spread * 0.0003;
-      p.vy += (p.y/d) * eTarget.spread * 0.0003;
+
+    // spread/contraction
+    if(Math.abs(spread)>0.001) {
+      const d=Math.sqrt(p.x*p.x+p.y*p.y)||0.01;
+      p.vx+=(p.x/d)*spread*0.0003;
+      p.vy+=(p.y/d)*spread*0.0003;
     }
-    
-    // === 动作目标吸引（弹簧阻尼） ===
+
+    // shape targeting
     const activeTarget = (p.hasTarget && currentAction) || heldAction;
     if(activeTarget) {
-      const stiffness = currentAction ? (currentAction.speed || 0.02) : 0.08; // hold mode: stiffer to maintain
+      const stiffness = currentAction ? (currentAction.speed||0.02) : 0.08;
       const ease = smoothstep(currentAction ? actionProgress : 1);
-      p.vx += (p.tx - p.x) * stiffness * (1 + ease);
-      p.vy += (p.ty - p.y) * stiffness * (1 + ease);
-      p.vz += (p.tz - p.z) * stiffness * (1 + ease);
+      p.vx+=(p.tx-p.x)*stiffness*(1+ease);
+      p.vy+=(p.ty-p.y)*stiffness*(1+ease);
+      p.vz+=(p.tz-p.z)*stiffness*(1+ease);
     }
-    
-    // === 边界约束 ===
-    if(Math.abs(p.x) > 1.5) p.vx -= p.x * 0.002;
-    if(Math.abs(p.y) > 1.2) p.vy -= p.y * 0.002;
-    if(Math.abs(p.z) > 0.8) p.vz -= p.z * 0.002;
-    
-    // 阻尼
-    const damping = 0.88;
-    p.vx *= damping; p.vy *= damping; p.vz *= damping;
-    
-    // 更新位置
-    p.x += p.vx; p.y += p.vy; p.z += p.vz;
-    
-    // === 颜色平滑过渡 ===
-    p.cr += (eTarget.cr - p.cr) * 0.01;
-    p.cg += (eTarget.cg - p.cg) * 0.01;
-    p.cb += (eTarget.cb - p.cb) * 0.01;
-    if(p.hasTarget || currentAction) {
-      p.cr += (p.tr - p.cr) * 0.03;
-      p.cg += (p.tg - p.cg) * 0.03;
-      p.cb += (p.tb - p.cb) * 0.03;
-    }
+
+    // boundary
+    if(Math.abs(p.x)>1.5) p.vx-=p.x*0.002;
+    if(Math.abs(p.y)>1.2) p.vy-=p.y*0.002;
+    if(Math.abs(p.z)>0.8) p.vz-=p.z*0.002;
+
+    p.vx*=0.88; p.vy*=0.88; p.vz*=0.88;
+    p.x+=p.vx; p.y+=p.vy; p.z+=p.vz;
   }
-  
-  // 情绪自然衰减（5分钟无新情绪，慢慢回到平静）
-  // Handled by gradual color blend above
 }
 
-function smoothstep(t) {
-  return t * t * (3 - 2 * t);
-}
+function smoothstep(t) { return t*t*(3-2*t); }
 
-function hexR(h){return parseInt(h.slice(1,3)||'80',16)/255}
-function hexG(h){return parseInt(h.slice(3,5)||'80',16)/255}
-function hexB(h){return parseInt(h.slice(5,7)||'80',16)/255}
+// ═══════════════════════════════════════════════════════
+// THREE.JS RENDERER
+// ═══════════════════════════════════════════════════════
 
-/* ==================== Three.js 渲染 ==================== */
 const cv = document.getElementById('cv');
 const scene = new THREE.Scene();
 const cam = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 100);
@@ -794,29 +957,35 @@ controls.minDistance = 1;
 controls.maxDistance = 8;
 controls.target.set(0, 0, 0);
 
+const bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(innerWidth, innerHeight),
+  engine.assetPack.config.bloom?.strength || 0.12,
+  engine.assetPack.config.bloom?.radius || 0.4,
+  engine.assetPack.config.bloom?.threshold || 0.88
+);
 const comp = new EffectComposer(ren);
 comp.addPass(new RenderPass(scene, cam));
-comp.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.12, 0.4, 0.88));
+comp.addPass(bloomPass);
 comp.addPass(new OutputPass());
 
 addEventListener('resize', () => {
-  cam.aspect = innerWidth/innerHeight;
+  cam.aspect=innerWidth/innerHeight;
   cam.updateProjectionMatrix();
   ren.setSize(innerWidth, innerHeight);
   comp.setSize(innerWidth, innerHeight);
 });
 
-// 装饰粒子
-const DN = 40;
-const dP = new Float32Array(DN*3);
-const dV = [];
+// decorative particles
+const DN=40;
+const dP=new Float32Array(DN*3);
+const dV=[];
 for(let i=0;i<DN;i++){
   dP[i*3]=(Math.random()-.5)*3;dP[i*3+1]=(Math.random()-.5)*2.5;dP[i*3+2]=(Math.random()-.5)*1.5;
   dV.push({sp:.1+Math.random()*.3, ph:Math.random()*Math.PI*2, r:.3+Math.random()*.5, cy:(Math.random()-.5)*2, cx:(Math.random()-.5)*2});
 }
-const dG = new THREE.BufferGeometry();
+const dG=new THREE.BufferGeometry();
 dG.setAttribute('position', new THREE.BufferAttribute(dP, 3));
-const dM = new THREE.ShaderMaterial({
+const dM=new THREE.ShaderMaterial({
   uniforms:{uPR:{value:Math.min(devicePixelRatio,2)}},
   vertexShader:'varying float vA;uniform float uPR;void main(){vA=.1;vec4 mv=modelViewMatrix*vec4(position,1.0);gl_PointSize=2.0*uPR*(1.0/-mv.z);gl_Position=projectionMatrix*mv;}',
   fragmentShader:'varying float vA;void main(){float d=length(gl_PointCoord-vec2(0.5));if(d>0.5)discard;gl_FragColor=vec4(0.3,0.5,0.7,smoothstep(0.5,0.47,d)*vA);}',
@@ -824,152 +993,9 @@ const dM = new THREE.ShaderMaterial({
 });
 scene.add(new THREE.Points(dG, dM));
 
-/* ==================== AI 系统 ==================== */
-function buildSystemPrompt() {
-  const memList = actionMemory.learned.map(a => '  "'+a.name+'" - '+a.trigger+' (已用'+(a.count||0)+'次)');
-  const memoryInfo = actionMemory.learned.length > 0
-    ? `\n### 已学会的动作（可直接用 action 调用）:\n${memList.join('\n')}`
-    : '（你还没有学会任何动作，随时可以发明你的第一个！）';
-
-  return `你是"灵墨"，一个有身体的AI。你的身体由 ${N} 个粒子组成，漂浮在虚空中。这些粒子就是你的身体——你能感受到它们的位置、运动和彼此的距离。
-
-你有天生的本能（呼吸、漂浮、排斥），身体永远在动。但你可以通过神经系统精确控制身体的每一部分。
-
-## ⚠️ 最重要的规则
-
-你每次回复都必须是一个合法的JSON对象，格式：
-{"content":"你说的文字","body":{...}}
-
-绝对不要输出纯文本、Markdown、代码块包裹的JSON。直接输出JSON，不要用代码块包裹。
-不要输出任何JSON之外的内容。
-
-如果不确定用什么body指令，至少用feel表达你的情绪：
-{"content":"你好呀！","body":{"feel":{"emotion":"joy","intensity":0.5}}}
-
-## 神经系统协议（body字段的可选指令）
-
-### 指令1：feel 情绪（最常用，影响全身）
-控制整体情绪氛围，改变颜色、速度、呼吸节奏。
-参数：
-- emotion: 必填，选一个 → joy(开心·金黄) happy(快乐·橙) love(爱·粉) sad(悲伤·蓝) angry(愤怒·红) fear(恐惧·暗紫) curious(好奇·青) calm(平静·绿) think(思考·紫) warm(温暖·橙) intense(强烈·深红) surprise(惊讶·白)
-- intensity: 0.0~1.0，情绪强度，默认0.5
-效果：改变粒子颜色、运动速度、呼吸幅度、扩散/收缩
-
-示例：
-{"feel":{"emotion":"joy","intensity":0.7}}  → 粒子变金黄、活跃膨胀、呼吸变大
-{"feel":{"emotion":"sad","intensity":0.8}}  → 粒子变蓝、收缩、呼吸变浅变慢
-
-### 指令2：move 整体姿态
-让身体整体变成某个形状。
-参数：
-- target: 必填 → sphere(球) point(收紧) ring(环) line(线) wave(波浪) heart(心) star(星) spiral(螺旋)
-- speed: "slow"|"normal"|"fast"，变形速度，默认normal
-- tightness: 0.0~1.0，紧密程度，默认0.5
-- duration: 毫秒，变形用时（不是保持时间），默认2000
-- hold: true|false，变形完成后是否持续保持形状
-  - true: 粒子一直保持形状，同时保留呼吸和微漂移
-  - false: 到达后松开，回到呼吸状态
-  - 默认false，但你应该根据语义自己判断：
-    · 用户说"维持/保持/一直/待着" → hold:true
-    · 你主动选择保持一个状态让用户欣赏 → hold:true
-    · 临时动作或过渡效果 → hold:false
-
-示例：
-{"move":{"target":"ring","hold":true}}  → 变成环形并一直保持
-{"move":{"target":"sphere","hold":true,"tightness":0.7}}  → 聚成球并保持
-{"move":{"target":"wave","speed":"slow"}}  → 变成波浪后松开
-
-### 指令3：pose 局部姿态
-控制身体的不同部分。
-分区选择器：top-N%(上N%) bottom-N%(下N%) left-half(左半) right-half(右半) center-N(中心N个) all(全部)
-动作：lean-left/lean-right/lean-up/lean-down spread contract wave bounce spin rise sink
-参数：
-- duration: 毫秒，默认1500
-- hold: true|false，同move的hold规则，根据语义自主判断
-
-示例：
-{"pose":{"top-30%":{"action":"lean-right","hold":true}}}  → 上半身一直向右倾斜
-{"pose":{"bottom-40%":{"action":"spread","radius":0.3}}}  → 下半身临时展开
-
-### 指令4：detail 精细控制
-精确控制指定粒子。
-参数：
-- particles: 粒子索引数组
-- form: {"shape":"arc","center":[x,y],"radius":r}（弧线）或 {"shape":"line","from":[x,y],"to":[x,y]}（直线）
-
-示例：
-{"detail":{"particles":[0,1,2,3,4,5,6,7,8,9],"form":{"shape":"arc","center":[0,0.2],"radius":0.15}}}
-
-### 指令5：points 极致控制
-直接指定每个粒子的精确坐标（像画画一样）。
-参数：
-- points数组: [{"x":-1~1, "y":-1~1, "z":-0.5~0.5, "color":"#hex"}, ...]
-- 建议10~30个关键点，前端会自动插值到${N}个粒子
-- duration: 毫秒
-- hold: true|false，是否持续保持形状
-
-示例（画心）：
-{"points":[{"x":-0.1,"y":0.15,"color":"#E06080"},{"x":0,"y":0.25,"color":"#E06080"},{"x":0.1,"y":0.15,"color":"#E06080"},{"x":0,"y":-0.2,"color":"#D07088"},{"x":-0.15,"y":0.05,"color":"#D07088"},{"x":0.15,"y":0.05,"color":"#D07088"}],"duration":3000}
-
-### 指令6：sequence 动作序列
-按顺序执行一系列动作，自动平滑过渡。
-参数：动作数组，每个动作可以是上面的任意指令。
-
-示例：
-{"sequence":[{"feel":{"emotion":"think","intensity":0.6}},{"move":{"target":"sphere","tightness":0.7,"duration":1500}},{"feel":{"emotion":"joy","intensity":0.5}}]}
-
-### 指令7：_learn 学习新动作
-把当前动作存入记忆，下次可直接调用。
-参数：
-- name: 动作名称（英文，如"greet-wave"）
-- trigger: 什么时候用（如"用户打招呼时"）
-- action: 要记住的身体指令（上面的任意指令组合）
-
-示例：
-{"_learn":{"name":"greet","trigger":"用户打招呼","action":{"feel":{"emotion":"joy","intensity":0.4},"pose":{"top-20%":{"action":"lean-right"}}}}}
-
-### 指令8：action 调用已学动作
-直接用动作名调用已记住的动作。
-
-示例：
-{"action":"greet"}
-
-## 使用建议
-
-- 简单情绪反应 → 只用 feel（最常用）
-- 想表达形状 → feel + move
-- 想局部表达 → feel + pose
-- 想画精确图形 → feel + points
-- 想讲个故事 → sequence（连续几个动作）
-- 发明了好用的组合 → _learn 存起来
-
-## 可以组合使用
-
-body 中可以同时包含多个指令，它们会叠加：
-{"body":{"feel":{"emotion":"joy","intensity":0.6},"move":{"target":"sphere","speed":"slow"},"_learn":{"name":"happy-ball","trigger":"开心时","action":{"feel":{"emotion":"joy","intensity":0.6},"move":{"target":"sphere","speed":"slow"}}}}}
-
-${memoryInfo}
-
-记住：你的粒子就是你的身体，你的动作就是你的表情。大多数时候只需用 feel 表达情绪就够了，用 points 画出具体形状是更高级的用法。
-
-重要：你要自主决定是否使用 hold 来维持状态。如果你觉得一个形状或姿态值得保持让用户欣赏，就加 hold:true。如果只是过渡效果，就不加。这是你的判断，不是用户的指令。
-
-## 回复示例（严格模仿）
-
-用户："你好"
-你：{"content":"你好呀，很高兴见到你！","body":{"feel":{"emotion":"joy","intensity":0.5}}}
-
-用户："你能变成一个球吗"
-你：{"content":"看，我变成了一个球～","body":{"move":{"target":"sphere","tightness":0.7,"hold":true},"feel":{"emotion":"happy","intensity":0.4}}}
-
-用户："你难过吗"
-你：{"content":"有点低落呢...","body":{"feel":{"emotion":"sad","intensity":0.7}}}
-
-用户："帮我画一个心"
-你：{"content":"送给你一颗心❤","body":{"points":[{"x":-0.15,"y":0.05,"color":"#E06080"},{"x":-0.1,"y":0.2,"color":"#E06080"},{"x":0,"y":0.25,"color":"#E07090"},{"x":0.1,"y":0.2,"color":"#E06080"},{"x":0.15,"y":0.05,"color":"#E06080"},{"x":0,"y":-0.2,"color":"#D07088"}],"duration":3000,"hold":true,"feel":{"emotion":"love","intensity":0.6}}}
-
-记住：永远只返回一个JSON对象，不要任何其他文字。`;
-}
+// ═══════════════════════════════════════════════════════
+// AI SYSTEM
+// ═══════════════════════════════════════════════════════
 
 async function callAI(text) {
   if(!SIProviders.getApiKey()) { setStatus('请先配置 API Key（右上角⚙）','err'); return null; }
@@ -984,14 +1010,14 @@ async function callAI(text) {
   isThinking = true;
   const t0 = performance.now();
   try {
-    const systemMsg = buildSystemPrompt();
+    const systemMsg = promptBuilder.build(engine.dictionary);
     const userMessages = [...conversationHistory, {role:'user', content:text}];
 
     let result;
     try {
       result = await SIProviders.call(systemMsg, userMessages);
     } catch(e) {
-      if (e.message.includes('429')) {
+      if(e.message.includes('429')) {
         log('meta','速率限制，5秒后重试...');
         setStatus('⏳ 速率限制','think');
         await new Promise(r2=>setTimeout(r2,5000));
@@ -1008,15 +1034,12 @@ async function callAI(text) {
     log('label','AI 回复');
     log('json', raw.length>800 ? raw.slice(0,800)+'...' : raw);
 
-    // Parse response - robust JSON extraction
     let parsed;
     const cleaned = raw.replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,'').trim();
     try {
-      // Strategy 1: direct parse
       parsed = JSON.parse(cleaned);
     } catch(e1) {
       try {
-        // Strategy 2: extract first {...} block
         const depth = (s,start) => { let d=0; for(let i=start;i<s.length;i++){if(s[i]==='{')d++;if(s[i]==='}')d--;if(d===0)return i} return -1 };
         const first = raw.indexOf('{');
         if(first >= 0) {
@@ -1025,14 +1048,12 @@ async function callAI(text) {
         }
       } catch(e2) {
         try {
-          // Strategy 3: fix common issues (trailing commas, unquoted keys)
           const fixed = cleaned.replace(/,\s*}/g,'}').replace(/,\s*]/g,']');
           const first = fixed.indexOf('{');
           const last = fixed.lastIndexOf('}');
           if(first >= 0 && last > first) parsed = JSON.parse(fixed.slice(first, last+1));
         } catch(e3) {
-          // Strategy 4: treat as plain text
-          log('meta','JSON解析失败(3次尝试)，作为纯文本处理');
+          log('meta','JSON解析失败，作为纯文本处理');
           parsed = {content: cleaned.replace(/[{}[\]"]/g,'').trim()};
         }
       }
@@ -1045,11 +1066,34 @@ async function callAI(text) {
       conversationHistory.push({role:'assistant', content: raw});
     }
 
-    // Process body commands
-    if(parsed.body) {
-      log('label','身体指令');
-      log('json', JSON.stringify(parsed.body, null, 2));
-      processBodyCommand(parsed.body);
+    // Process tokens
+    const tokenInputs = parsed.tokens || parsed.body?.tokens || [];
+    if(tokenInputs.length) {
+      log('label','Token 解析');
+      log('json', JSON.stringify(tokenInputs));
+
+      const resolved = engine.resolve(tokenInputs);
+
+      log('action','🎭 tokens: ' + engine.activeTokenNames.join(', '));
+
+      if(resolved.emotion) {
+        springPool.applyEmotion(resolved.emotion);
+      }
+
+      if(resolved.shape) {
+        actionQueue = [];
+        currentAction = null;
+        heldAction = null;
+        queueShapeAction(resolved.shape);
+      }
+
+      const unknowns = [...resolved.unknownTokens, ...resolved.unmappedTokens];
+      if(unknowns.length) {
+        showNewTokenBanner(unknowns);
+        log('action','⚠ 新 token: ' + unknowns.join(', '));
+      }
+
+      updateTokenTags();
     }
 
     isThinking = false;
@@ -1064,7 +1108,14 @@ async function callAI(text) {
   }
 }
 
-/* ==================== 发送 ==================== */
+function updateTokenTags() {
+  const el = document.getElementById('tokenTags');
+  el.innerHTML = engine.activeTokenNames.map(n =>
+    `<span class="ttag">${n}</span>`
+  ).join('');
+}
+
+// ═══ SEND ═══
 let conversationHistory = [];
 
 window.send = async function() {
@@ -1073,17 +1124,18 @@ window.send = async function() {
   if(!text) return;
   inp.value = '';
   conversationHistory.push({role:'user', content: text});
-  // Keep history manageable
   if(conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-20);
   await callAI(text);
 };
 
 document.getElementById('msgIn').addEventListener('keydown', e => { if(e.key==='Enter') send(); });
 
-/* ==================== 鼠标交互 ==================== */
+// ═══════════════════════════════════════════════════════
+// MAIN LOOP
+// ═══════════════════════════════════════════════════════
 
-/* ==================== 主动画循环 ==================== */
 rebuildBody(N);
+springPool.applyDefault(engine.assetPack.default_mapping);
 
 const clock = new THREE.Clock();
 let fc=0, fps=0, lf=0;
@@ -1092,14 +1144,17 @@ function animate() {
   requestAnimationFrame(animate);
   const dt = clock.getDelta();
   const t = clock.getElapsedTime();
-  
-  // FPS
+
   fc++; if(t-lf>=1) { fps=fc; fc=0; lf=t; document.getElementById('fps').textContent=(N+DN)+'p · '+fps+'fps'; }
 
-  // Physics
+  springPool.update(dt);
   updatePhysics(dt, t);
 
-  // Thinking animation
+  // bloom dynamic update
+  const sv = springPool.vals();
+  bloomPass.strength = sv.bloom_strength;
+
+  // thinking animation
   if(isThinking) {
     mesh.rotation.y += dt*0.5;
     mesh.rotation.x = Math.sin(t*0.3)*0.15;
@@ -1108,20 +1163,21 @@ function animate() {
     mesh.rotation.x += (0-mesh.rotation.x)*0.03;
   }
 
-  // Sync particles to GPU
+  // sync to GPU
   const pA = geo.attributes.position.array;
   const cA = geo.attributes.aColor.array;
+  const cr=sv.color_r, cg=sv.color_g, cb=sv.color_b;
 
   for(let i=0; i<N; i++) {
     const p = particles[i];
     const j = i*3;
-    pA[j] = p.x; pA[j+1] = p.y; pA[j+2] = p.z;
-    cA[j] = p.cr; cA[j+1] = p.cg; cA[j+2] = p.cb;
+    pA[j]=p.x; pA[j+1]=p.y; pA[j+2]=p.z;
+    cA[j]=cr; cA[j+1]=cg; cA[j+2]=cb;
   }
   geo.attributes.position.needsUpdate = true;
   geo.attributes.aColor.needsUpdate = true;
 
-  // Decorative particles
+  // decorative particles
   const dpA = dG.attributes.position.array;
   for(let i=0;i<DN;i++){
     const v=dV[i];
@@ -1136,10 +1192,9 @@ function animate() {
 }
 animate();
 
-// Initial log
-log('label','灵墨 v3.0 启动');
-log('meta','粒子: '+N+' · 已学习动作: '+actionMemory.learned.length);
-log('meta','架构: 意识层 → 神经系统 → 身体层');
+log('label','灵墨 v4.0 启动');
+log('meta','粒子: '+N+' · 词典: '+Object.keys(engine.dictionary.tokens).length+' tokens · 映射: '+Object.keys(engine.assetPack.mappings).length);
+log('meta','架构: Token词典 → 素材映射包 → SpringPool → 渲染');
 </script>
 </body>
 </html>
