@@ -543,7 +543,78 @@ const ARRANGEMENTS = {
 const SHAPES = ARRANGEMENTS;
 
 // ═══════════════════════════════════════════════════════
-// MOVEMENTS (13 continuous motion behaviors)
+// SIMPLEX 3D NOISE (Stefan Gustavson)
+// ═══════════════════════════════════════════════════════
+
+const _F3=1/3,_G3=1/6;
+const _p=new Uint8Array([151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208,89,18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180]);
+const _g3=[[1,1,0],[-1,1,0],[1,-1,0],[-1,-1,0],[1,0,1],[-1,0,1],[1,0,-1],[-1,0,-1],[0,1,1],[0,-1,1],[0,1,-1],[0,-1,-1]];
+const _pm=new Uint8Array(512),_pm12=new Uint8Array(512);
+for(let _i=0;_i<512;_i++){_pm[_i]=_p[_i&255];_pm12[_i]=_pm[_i]%12;}
+function noise3D(x,y,z){
+  const s=(x+y+z)*_F3;
+  const i=Math.floor(x+s),j=Math.floor(y+s),k=Math.floor(z+s);
+  const t2=(i+j+k)*_G3;
+  const x0=x-(i-t2),y0=y-(j-t2),z0=z-(k-t2);
+  let i1,j1,k1,i2,j2,k2;
+  if(x0>=y0){if(y0>=z0){i1=1;j1=0;k1=0;i2=1;j2=1;k2=0;}else if(x0>=z0){i1=1;j1=0;k1=0;i2=1;j2=0;k2=1;}else{i1=0;j1=0;k1=1;i2=1;j2=0;k2=1;}}
+  else{if(y0<z0){i1=0;j1=0;k1=1;i2=0;j2=1;k2=1;}else if(x0<z0){i1=0;j1=1;k1=0;i2=0;j2=1;k2=1;}else{i1=0;j1=1;k1=0;i2=1;j2=1;k2=0;}}
+  const x1=x0-i1+_G3,y1=y0-j1+_G3,z1=z0-k1+_G3;
+  const x2=x0-i2+2*_G3,y2=y0-j2+2*_G3,z2=z0-k2+2*_G3;
+  const x3=x0-1+3*_G3,y3=y0-1+3*_G3,z3=z0-1+3*_G3;
+  const ii=i&255,jj=j&255,kk=k&255;
+  const g0=_g3[_pm12[ii+_pm[jj+_pm[kk]]]],g1=_g3[_pm12[ii+i1+_pm[jj+j1+_pm[kk+k1]]]];
+  const g2=_g3[_pm12[ii+i2+_pm[jj+j2+_pm[kk+k2]]]],g3=_g3[_pm12[ii+1+_pm[jj+1+_pm[kk+1]]]];
+  let n0,n1,n2,n3;
+  let t0=0.6-x0*x0-y0*y0-z0*z0;n0=t0<0?0:(t0*=t0,t0*t0*(g0[0]*x0+g0[1]*y0+g0[2]*z0));
+  let t1=0.6-x1*x1-y1*y1-z1*z1;n1=t1<0?0:(t1*=t1,t1*t1*(g1[0]*x1+g1[1]*y1+g1[2]*z1));
+  let t22=0.6-x2*x2-y2*y2-z2*z2;n2=t22<0?0:(t22*=t22,t22*t22*(g2[0]*x2+g2[1]*y2+g2[2]*z2));
+  let t3=0.6-x3*x3-y3*y3-z3*z3;n3=t3<0?0:(t3*=t3,t3*t3*(g3[0]*x3+g3[1]*y3+g3[2]*z3));
+  return 32*(n0+n1+n2+n3);
+}
+
+// ═══════════════════════════════════════════════════════
+// CURL NOISE (divergence-free flow field)
+// ═══════════════════════════════════════════════════════
+
+function curlNoise(x,y,z,t,freq){
+  const e=0.01,f2=freq||1;
+  const P1=(px,py,pz)=>noise3D(px*f2,py*f2,pz*f2+t);
+  const P2=(px,py,pz)=>noise3D(px*f2+31.4,py*f2+47.8,pz*f2+t);
+  const P3=(px,py,pz)=>noise3D(px*f2+74.3,py*f2+92.1,pz*f2+t);
+  const dP3dy=(P3(x,y+e,z)-P3(x,y-e,z))/(2*e);
+  const dP2dz=(P2(x,y,z+e)-P2(x,y,z-e))/(2*e);
+  const dP1dz=(P1(x,y,z+e)-P1(x,y,z-e))/(2*e);
+  const dP3dx=(P3(x+e,y,z)-P3(x-e,y,z))/(2*e);
+  const dP2dx=(P2(x+e,y,z)-P2(x-e,y,z))/(2*e);
+  const dP1dy=(P1(x,y+e,z)-P1(x,y-e,z))/(2*e);
+  return [dP3dy-dP2dz, dP1dz-dP3dx, dP2dx-dP1dy];
+}
+
+// ═══════════════════════════════════════════════════════
+// COSINE PALETTE (Inigo Quilez)
+// ═══════════════════════════════════════════════════════
+
+const PALETTES={
+  sunset:  {a:[.5,.5,.5],b:[.5,.5,.5],c:[1,1,1],d:[.0,.1,.2]},
+  ocean:   {a:[.5,.5,.5],b:[.5,.5,.5],c:[1,1,1],d:[.3,.2,.2]},
+  rainbow: {a:[.5,.5,.5],b:[.5,.5,.5],c:[1,1,1],d:[.0,.33,.67]},
+  ember:   {a:[.5,.5,.5],b:[.5,.5,.5],c:[1,.7,.4],d:[.0,.15,.2]},
+  aurora:  {a:[.5,.5,.5],b:[.5,.5,.5],c:[1,1,.5],d:[.8,.9,.3]},
+  forest:  {a:[.5,.5,.5],b:[.5,.5,.5],c:[1,1,1],d:[.0,.33,.17]},
+  ice:     {a:[.5,.5,.5],b:[.5,.5,.5],c:[1,1,1],d:[.0,.1,.2]},
+  neon:    {a:[.5,.5,.5],b:[.5,.5,.5],c:[2,1,0],d:[.5,.2,.25]},
+};
+function cosinePalette(t,a,b,c,d){
+  return [
+    Math.max(0,Math.min(1,a[0]+b[0]*Math.cos(6.28318*(c[0]*t+d[0])))),
+    Math.max(0,Math.min(1,a[1]+b[1]*Math.cos(6.28318*(c[1]*t+d[1])))),
+    Math.max(0,Math.min(1,a[2]+b[2]*Math.cos(6.28318*(c[2]*t+d[2]))))
+  ];
+}
+
+// ═══════════════════════════════════════════════════════
+// MOVEMENTS (16 continuous motion behaviors)
 // Return [dx, dy, dz] position offsets applied per-frame
 // ═══════════════════════════════════════════════════════
 
@@ -633,6 +704,24 @@ const MOVEMENTS = {
     const normalized=i/(n-1||1);
     const wave=Math.sin(t*spd-normalized*Math.PI*4)*amp;
     return [0, wave, wave*0.3];
+  },
+  curl_flow(i,n,t,p,pt) {
+    const freq=p.noise_freq||0.8, spd=(p.movement_speed||0.3)*0.5;
+    const amp=(p.movement_amplitude||0.5)*0.15;
+    const [cx,cy,cz]=curlNoise(pt.tx||0,pt.ty||0,pt.tz||0,t*spd,freq);
+    return [cx*amp,cy*amp,cz*amp];
+  },
+  curl_turbulence(i,n,t,p,pt) {
+    const freq=p.noise_freq||1.5, spd=(p.movement_speed||0.8)*0.8;
+    const amp=(p.movement_amplitude||0.5)*0.2;
+    const [cx,cy,cz]=curlNoise(pt.tx||0,pt.ty||0,pt.tz||0,t*spd,freq);
+    return [cx*amp,cy*amp,cz*amp];
+  },
+  curl_vortex(i,n,t,p,pt) {
+    const freq=p.noise_freq||0.5, spd=(p.movement_speed||0.5)*0.3;
+    const amp=(p.movement_amplitude||0.5)*0.12;
+    const [cx,cy,cz]=curlNoise(pt.tx||0,pt.ty||0,pt.tz||0,t*spd,freq);
+    return [cx*amp, cy*amp+amp*0.3, cz*amp];
   },
 };
 
@@ -878,9 +967,11 @@ ${tokenRef}
 const RENDER_ANALYZER_PROMPT = `你是灵墨的视觉分析引擎。给定一个状态描述（token），为3D粒子可视化系统生成渲染参数。
 
 ## 色彩氛围
-- color: [r,g,b]（0-1），主色调
+- color: [r,g,b]（0-1），主色调（与palette二选一）
+- palette: 可选，色彩渐变方案（比单色更有表现力）
+  可选值：sunset ocean rainbow ember aurora forest ice neon
+- color_variation: float（0~0.3），粒子颜色随机变化幅度（让画面更有层次）
 - spread: float（-0.5~0.5），正=扩散，负=收缩
-- speed: float（0~0.02），基础运动速度
 - breathe_amp: float（0~0.025），呼吸幅度
 - breathe_freq: float（0.5~2.5），呼吸频率Hz
 
@@ -892,12 +983,13 @@ const RENDER_ANALYZER_PROMPT = `你是灵墨的视觉分析引擎。给定一个
 - arrangement_scale: float（0~1），排列大小
 
 ## 持续运动（movement）— 粒子的持续动态效果
+基础运动：
 - drift: 缓慢随机漂移（云团、雾气）
 - float_up: 缓缓上升（气泡、蒸汽）
 - fall_down: 缓缓下落（雨滴、落叶）
 - orbit: 环绕旋转（星球、回旋）
 - pulse: 脉冲扩缩（心跳、能量场）
-- spiral_motion: 螺旋运动（漩涡、龙卷风）
+- spiral_motion: 螺旋运动（漩涡）
 - flicker: 闪烁抖动（火焰、电流）
 - flow: 定向流动（河流、风）
 - breathe_motion: 强烈呼吸起伏（生命体）
@@ -905,6 +997,11 @@ const RENDER_ANALYZER_PROMPT = `你是灵墨的视觉分析引擎。给定一个
 - sway: 摇曳摆动（花朵、树梢）
 - vibrate: 快速振动（颤抖、共鸣）
 - wave_motion: 波浪传播（海浪、声浪）
+流体运动（推荐！更自然更有机）：
+- curl_flow: 流体般丝滑流动（烟雾、云雾、水波）★推荐用于自然主题
+- curl_turbulence: 湍流翻涌（暴风、激荡情绪）★推荐用于强烈情感
+- curl_vortex: 旋涡上升（龙卷风、能量柱）
+- noise_freq: float（0.3~2），噪声频率（低=大尺度流动，高=细碎翻涌）
 - movement_speed: float（0.1~2），运动速度
 - movement_amplitude: float（0.1~1），运动幅度
 
@@ -912,11 +1009,15 @@ const RENDER_ANALYZER_PROMPT = `你是灵墨的视觉分析引擎。给定一个
 - duration: int（1000~5000），过渡时间ms
 - hold: boolean，是否保持（有movement时建议true）
 
-请分析状态的语义、情感、意境、视觉意象。选择最能表达视觉感受的 arrangement + movement 组合。
-例如："流动的云团"→ cloud + drift，"心跳加速"→ sphere + pulse，"星空"→ starfield + drift。
+请分析状态的语义、情感、意境、视觉意象。优先使用 curl 类运动（更自然），搭配 palette 渐变色。
+例如：
+"流动的云团"→ cloud + curl_flow + palette:ocean
+"心跳加速"→ sphere + pulse + palette:ember
+"星空"→ starfield + curl_flow + palette:ice
+"愤怒的风暴"→ tornado + curl_turbulence + palette:neon
 
 返回纯 JSON：
-{"color":[r,g,b],"spread":...,"breathe_amp":...,"breathe_freq":...,"arrangement":"...","arrangement_scale":...,"movement":"...","movement_speed":...,"movement_amplitude":...,"duration":...,"hold":true/false,"reasoning":"简述"}`;
+{"color":[r,g,b],"palette":"...","color_variation":...,"arrangement":"...","arrangement_scale":...,"movement":"...","noise_freq":...,"movement_speed":...,"movement_amplitude":...,"duration":...,"hold":true,"reasoning":"简述"}`;
 
 let generatingSet = new Set();
 
@@ -1157,11 +1258,12 @@ window.previewMapping = function(name) {
     for(const m of arrangementMappings) {
       const arr = m.arrangement || m.shape || '?';
       const mov = m.movement ? `→${m.movement}` : '';
+      const pal = m.palette ? `🎨${m.palette}` : '';
       const c = m.color || [0.4,0.4,0.45];
       html += `<div class="pk-item" onclick="previewMapping('${m.name.replace(/'/g,"\\'")}')">
         <span class="pk-color" style="background:rgb(${Math.round(c[0]*255)},${Math.round(c[1]*255)},${Math.round(c[2]*255)})"></span>
         <span class="pk-name">${m.name}</span>
-        <span class="pk-mapping">${arr}${mov}</span>
+        <span class="pk-mapping">${arr}${mov}${pal}</span>
       </div>`;
     }
   }
@@ -1319,6 +1421,9 @@ function queueShapeAction(mapping) {
     name:'shape-'+arrName, hold, startTime:null,
     movement: mapping.movement || null,
     movementParams: mapping,
+    palette: mapping.palette || null,
+    paletteParams: mapping.palette_params || null,
+    colorVariation: mapping.color_variation || 0,
   });
 }
 
@@ -1636,12 +1741,27 @@ function animate() {
   const pA = geo.attributes.position.array;
   const cA = geo.attributes.aColor.array;
   const cr=sv.color_r, cg=sv.color_g, cb=sv.color_b;
+  const act = heldAction || currentAction;
+  let pal = null;
+  if(act) {
+    if(act.palette && PALETTES[act.palette]) pal = PALETTES[act.palette];
+    else if(act.paletteParams) pal = act.paletteParams;
+  }
+  const cv = act ? (act.colorVariation || 0) : 0;
 
   for(let i=0; i<N; i++) {
     const p = particles[i];
     const j = i*3;
     pA[j]=p.x; pA[j+1]=p.y; pA[j+2]=p.z;
-    cA[j]=cr; cA[j+1]=cg; cA[j+2]=cb;
+    if(pal) {
+      const [pr,pg,pb] = cosinePalette(i/N+t*0.05, pal.a, pal.b, pal.c, pal.d);
+      cA[j]=pr; cA[j+1]=pg; cA[j+2]=pb;
+    } else if(cv > 0.001) {
+      const v = noise3D(p.x*2, p.y*2, t*0.3) * cv;
+      cA[j]=cr+v; cA[j+1]=cg+v*0.5; cA[j+2]=cb-v*0.3;
+    } else {
+      cA[j]=cr; cA[j+1]=cg; cA[j+2]=cb;
+    }
   }
   geo.attributes.position.needsUpdate = true;
   geo.attributes.aColor.needsUpdate = true;
